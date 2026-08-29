@@ -20,3 +20,13 @@ CREATE TABLE IF NOT EXISTS videos (
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Create games table for playable web games
+CREATE TABLE IF NOT EXISTS games (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    thumbnail_url TEXT NOT NULL,
+    play_url TEXT NOT NULL, -- The playable iframe URL
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

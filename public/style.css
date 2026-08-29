@@ -681,6 +681,132 @@ body {
 
 
 /* ========================================================
+   GAMING FEED STYLES (🎮 Joystick Tab)
+   ======================================================== */
+.gaming-feed-container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 8px 16px 40px 16px;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 16px;
+}
+
+.game-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dddfe2;
+}
+
+.game-card-img-container {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    background-color: #dddfe2;
+}
+
+.game-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.game-card-details {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.game-card h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1c1e21;
+    margin-bottom: 6px;
+}
+
+.game-card p {
+    font-size: 13px;
+    color: #65676b;
+    line-height: 18px;
+    margin-bottom: 16px;
+    flex-grow: 1;
+}
+
+.play-game-btn {
+    background-color: #1877f2;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.1s ease;
+}
+
+.play-game-btn:hover {
+    background-color: #166fe5;
+}
+
+/* Game Player Modal Frame */
+.game-modal-content {
+    background-color: #ffffff;
+    width: 95%;
+    max-width: 800px;
+    height: 85vh;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-modal-header {
+    height: 48px;
+    border-bottom: 1px solid #e4e6eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    background-color: #ffffff;
+    flex-shrink: 0;
+}
+
+.game-modal-header h2 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1c1e21;
+}
+
+.game-iframe-container {
+    flex-grow: 1;
+    width: 100%;
+    position: relative;
+    background-color: #000000;
+}
+
+.game-iframe-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+
+/* ========================================================
    RESPONSIVE DESIGN / MEDIA QUERIES
    ======================================================== */
 @media (max-width: 900px) {

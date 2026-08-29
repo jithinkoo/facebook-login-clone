@@ -19,7 +19,7 @@ if (databaseUrl) {
     });
     console.log('Database connection pool initialized.');
     
-    // Seed default products and videos if database is empty
+    // Seed default products, videos, and games if database is empty
     seedDatabase();
 } else {
     console.warn('WARNING: DATABASE_URL environment variable is not defined. Database features will not work.');
@@ -89,7 +89,21 @@ app.get('/api/videos', async (req, res) => {
     }
 });
 
-// Seed function to pre-populate products and videos
+// API: Get all games (Gaming Feed)
+app.get('/api/games', async (req, res) => {
+    if (!pool) {
+        return res.status(500).json({ error: 'Database not connected' });
+    }
+    try {
+        const result = await pool.query('SELECT * FROM games ORDER BY id DESC');
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error fetching games:', err.message);
+        res.status(500).json({ error: 'Database query failed' });
+    }
+});
+
+// Seed function to pre-populate products, videos, and games
 async function seedDatabase() {
     try {
         // 1. Create and seed products table
@@ -442,11 +456,53 @@ async function seedDatabase() {
                 'INSERT INTO videos (title, youtube_id, description) VALUES ($1, $2, $3)',
                 [
                     "Royal Enfield Classic 350 Detailed Ride Review | Kerala Style",
-                    "dQw4w9WgXcQ", // Placeholder (classic YouTube video)
+                    "dQw4w9WgXcQ", 
                     "A detailed review and test ride of the popular Royal Enfield Classic 350. Showing mileage, features, and driving comfort on Kerala roads."
                 ]
             );
             console.log('Seeded default video successfully!');
+        }
+
+        // 3. Create and seed games table
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS games (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                thumbnail_url TEXT NOT NULL,
+                play_url TEXT NOT NULL,
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
+
+        const gameCountRes = await pool.query('SELECT COUNT(*) FROM games');
+        const gameCount = parseInt(gameCountRes.rows[0].count);
+
+        if (gameCount === 0) {
+            console.log('Seeding database with default games...');
+            
+            const defaultGames = [
+                {
+                    title: "2048 Block Puzzle Game",
+                    thumbnail_url: "https://images.unsplash.com/photo-1606167668584-78701c57f13d?w=500",
+                    play_url: "https://play2048.co/",
+                    description: "Slide tiles to merge matching numbers and reach the 2048 tile! A highly addictive brain-training mathematical puzzle game."
+                },
+                {
+                    title: "Classic Retro Snake Game",
+                    thumbnail_url: "https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=500",
+                    play_url: "https://playsnake.org/",
+                    description: "Eat red apples to grow your snake longer. Avoid crashing into the walls or your own tail. Classic arcade fun!"
+                }
+            ];
+
+            for (const g of defaultGames) {
+                await pool.query(
+                    'INSERT INTO games (title, thumbnail_url, play_url, description) VALUES ($1, $2, $3, $4)',
+                    [g.title, g.thumbnail_url, g.play_url, g.description]
+                );
+            }
+            console.log('Seeded default games successfully!');
         }
 
     } catch (err) {

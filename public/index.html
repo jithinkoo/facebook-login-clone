@@ -24,7 +24,9 @@
                 <span class="icon">📺</span>
             </div>
             <div class="mp-tab" title="Groups"><span class="icon">👥</span></div>
-            <div class="mp-tab" title="Gaming"><span class="icon">🎮</span></div>
+            <div class="mp-tab" title="Gaming" id="gamingTab" onclick="showGamingView()">
+                <span class="icon">🎮</span>
+            </div>
         </div>
         <div class="mp-header-right">
             <div class="mp-nav-btn" title="Messenger">💬</div>
@@ -76,7 +78,7 @@
             <button class="mp-create-btn" onclick="openCreateListingModal()">+ Create new listing</button>
         </aside>
 
-        <!-- Product Listings / Video Feed Container -->
+        <!-- Product Listings / Video / Gaming Feed Container -->
         <main class="mp-content">
             <!-- Header for Marketplace Mode -->
             <div class="mp-content-header" id="contentHeader">
@@ -96,6 +98,13 @@
             <!-- Watch Feed Container (Hidden by default) -->
             <div id="videoFeedContainer" class="video-feed-container" style="display: none;">
                 <!-- Populated dynamically with video cards -->
+            </div>
+
+            <!-- Gaming Feed Container (Hidden by default) -->
+            <div id="gamingFeedContainer" class="gaming-feed-container" style="display: none;">
+                <div class="games-grid" id="gamesGrid">
+                    <!-- Populated dynamically with game cards -->
+                </div>
             </div>
         </main>
     </div>
@@ -124,7 +133,6 @@
                         </div>
                     </div>
                     <div class="chat-prompt">
-                        <!-- Direct, safe WhatsApp button redirecting to seller -->
                         <a id="whatsappBtn" class="whatsapp-btn" href="#" target="_blank">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block; vertical-align:middle;">
                                 <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.501-5.738-1.453L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.45 5.466 0 9.921-4.389 9.924-9.778.002-2.61-1.01-5.063-2.858-6.915C16.486 2.058 14.053 1.01 11.998 1.01c-5.48 0-9.94 4.387-9.943 9.776-.001 1.764.483 3.488 1.401 5.02L2.49 21.53l6.157-1.604z"/>
@@ -200,37 +208,63 @@
         </div>
     </div>
 
+    <!-- Game Player Modal Overlay -->
+    <div id="gamePlayerModal" class="modal-overlay" style="display: none;">
+        <div class="game-modal-content">
+            <div class="game-modal-header">
+                <h2 id="gameModalTitle">Play Game</h2>
+                <span class="close-modal" onclick="closeGamePlayerModal()" style="position:static; font-size:24px;">&times;</span>
+            </div>
+            <div class="game-iframe-container">
+                <iframe id="gameIframe" src=""></iframe>
+            </div>
+        </div>
+    </div>
+
     <!-- Script Section -->
     <script>
         let allProducts = [];
         let activeCategory = 'all';
 
-        // TABS TOGGLE NAVIGATION (🏠 Home vs 📺 Watch)
+        // TABS TOGGLE NAVIGATION (🏠 Home vs 📺 Watch vs 🎮 Gaming)
         function showHomeView() {
-            // Adjust active tab markers
             document.getElementById('homeTab').classList.add('active');
             document.getElementById('watchTab').classList.remove('active');
+            document.getElementById('gamingTab').classList.remove('active');
 
-            // Hide/Show elements
             document.querySelector('.mp-sidebar').style.display = 'flex';
             document.getElementById('contentHeader').style.display = 'block';
             document.getElementById('productGrid').style.display = 'grid';
             document.getElementById('videoFeedContainer').style.display = 'none';
+            document.getElementById('gamingFeedContainer').style.display = 'none';
         }
 
         function showWatchView() {
-            // Adjust active tab markers
             document.getElementById('watchTab').classList.add('active');
             document.getElementById('homeTab').classList.remove('active');
+            document.getElementById('gamingTab').classList.remove('active');
 
-            // Hide/Show elements
             document.querySelector('.mp-sidebar').style.display = 'none';
             document.getElementById('contentHeader').style.display = 'none';
             document.getElementById('productGrid').style.display = 'none';
             document.getElementById('videoFeedContainer').style.display = 'block';
+            document.getElementById('gamingFeedContainer').style.display = 'none';
 
-            // Load YouTube videos list from DB
             fetchVideos();
+        }
+
+        function showGamingView() {
+            document.getElementById('gamingTab').classList.add('active');
+            document.getElementById('homeTab').classList.remove('active');
+            document.getElementById('watchTab').classList.remove('active');
+
+            document.querySelector('.mp-sidebar').style.display = 'none';
+            document.getElementById('contentHeader').style.display = 'none';
+            document.getElementById('productGrid').style.display = 'none';
+            document.getElementById('videoFeedContainer').style.display = 'none';
+            document.getElementById('gamingFeedContainer').style.display = 'block';
+
+            fetchGames();
         }
 
         // Fetch products list from dynamic database API
@@ -325,6 +359,64 @@
             });
         }
 
+        // Fetch Games from database API
+        async function fetchGames() {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:#65676b; font-weight:bold;">Loading Games...</div>';
+            try {
+                const response = await fetch('/api/games');
+                if (!response.ok) throw new Error('Failed to fetch games');
+                const games = await response.json();
+                renderGames(games);
+            } catch (err) {
+                console.error(err);
+                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:red; font-weight:bold;">Failed to connect to database.</div>';
+            }
+        }
+
+        // Render Games in grid
+        function renderGames(games) {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = '';
+
+            if (games.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:#65676b; font-weight:bold;">No games in Gaming feed yet.</div>';
+                return;
+            }
+
+            games.forEach(g => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerHTML = `
+                    <div class="game-card-img-container">
+                        <img class="game-card-img" src="${g.thumbnail_url}" alt="${escapeHtml(g.title)}">
+                    </div>
+                    <div class="game-card-details">
+                        <h3>${escapeHtml(g.title)}</h3>
+                        <p>${escapeHtml(g.description || '')}</p>
+                        <button class="play-game-btn" onclick="playGame('${escapeHtml(g.play_url)}', '${escapeHtml(g.title)}')">Play Now</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Game Player Modal Actions
+        const gamePlayerModal = document.getElementById('gamePlayerModal');
+        const gameIframe = document.getElementById('gameIframe');
+        const gameModalTitle = document.getElementById('gameModalTitle');
+
+        function playGame(url, title) {
+            gameModalTitle.textContent = title;
+            gameIframe.src = url;
+            gamePlayerModal.style.display = 'flex';
+        }
+
+        function closeGamePlayerModal() {
+            gamePlayerModal.style.display = 'none';
+            gameIframe.src = ''; // Clear iframe to stop background sounds
+        }
+
         // Escape HTML for safety
         function escapeHtml(str) {
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
@@ -340,7 +432,6 @@
         const modalSeller = document.getElementById('modalSeller');
         const whatsappBtn = document.getElementById('whatsappBtn');
 
-        // Set owner/seller WhatsApp phone number (default setup is configured for Kerala classifieds)
         const OWNER_PHONE_NUMBER = "919876543210"; 
 
         function openProductModal(product) {
@@ -351,7 +442,6 @@
             modalDesc.textContent = product.description;
             modalSeller.textContent = product.seller;
 
-            // Formulate WhatsApp redirect message
             const customMsg = encodeURIComponent(`Hi, I am interested in buying the ${product.title} listed for ${product.price} in ${product.location}. Is it still available?`);
             whatsappBtn.href = `https://wa.me/${OWNER_PHONE_NUMBER}?text=${customMsg}`;
 
@@ -445,6 +535,7 @@
         window.addEventListener('click', (e) => {
             if (e.target === modal) closeProductModal();
             if (e.target === createModal) closeCreateListingModal();
+            if (e.target === gamePlayerModal) closeGamePlayerModal();
         });
 
         // Category Filtering
