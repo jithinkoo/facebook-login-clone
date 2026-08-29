@@ -33,15 +33,15 @@ body {
 }
 
 .brand-section img.fb-logo {
-    height: 106px;
-    margin-left: -28px;
+    height: 60px;
+    margin-left: -12px;
 }
 
 .brand-section h2 {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: normal;
-    line-height: 32px;
-    margin-top: -15px;
+    line-height: 28px;
+    margin-top: 10px;
     max-width: 500px;
 }
 
@@ -224,7 +224,7 @@ footer {
     }
     
     .brand-section img.fb-logo {
-        height: 70px;
+        height: 45px;
         margin-left: 0;
     }
     
