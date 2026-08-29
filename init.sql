@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS products (
     location VARCHAR(100) NOT NULL,
     seller VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
+    interest_count INT DEFAULT 0, -- Track demand (interested clicks)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

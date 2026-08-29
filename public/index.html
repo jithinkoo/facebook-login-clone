@@ -130,6 +130,7 @@
                     <h2 id="modalTitle">Product Title</h2>
                     <div id="modalPrice" class="modal-price">₹0</div>
                     <div id="modalLoc" class="modal-loc">Location</div>
+                    <div id="modalInterestCount" style="font-size: 14px; font-weight: bold; color: #e02424; margin-top: 8px; display: none;"></div>
                     <div class="divider"></div>
                     <h3>Description</h3>
                     <p id="modalDesc">Product description text...</p>
@@ -514,6 +515,19 @@
         const modalSeller = document.getElementById('modalSeller');
         const interestBtn = document.getElementById('interestBtn');
 
+        const modalInterestCount = document.getElementById('modalInterestCount');
+
+        function updateModalInterestLabel() {
+            if (!currentProduct) return;
+            const count = currentProduct.interest_count || 0;
+            if (count > 0) {
+                modalInterestCount.innerHTML = `🔥 ${count} ${count === 1 ? 'person is' : 'people are'} interested in this item`;
+                modalInterestCount.style.display = 'block';
+            } else {
+                modalInterestCount.style.display = 'none';
+            }
+        }
+
         function openProductModal(product) {
             currentProduct = product;
             modalImg.src = product.img_url;
@@ -522,6 +536,8 @@
             modalLoc.textContent = "Listed in " + product.location;
             modalDesc.textContent = product.description;
             modalSeller.textContent = product.seller;
+
+            updateModalInterestLabel();
 
             // Load interest toggle state from localStorage
             const interestedList = JSON.parse(localStorage.getItem('interestedProducts') || '{}');
@@ -541,24 +557,50 @@
             currentProduct = null;
         }
 
-        // Toggle interest state and save to local storage
-        function toggleInterest() {
+        // Toggle interest state and save to local storage (optimistic sync with PostgreSQL DB)
+        async function toggleInterest() {
             if (!currentProduct) return;
             
             const interestedList = JSON.parse(localStorage.getItem('interestedProducts') || '{}');
-            if (interestedList[currentProduct.id]) {
-                // Remove interest
+            const isCurrentlyInterested = interestedList[currentProduct.id];
+            const action = isCurrentlyInterested ? 'decrement' : 'increment';
+
+            // Optimistic UI updates
+            if (isCurrentlyInterested) {
                 delete interestedList[currentProduct.id];
                 interestBtn.classList.remove('active');
                 interestBtn.innerHTML = '🌟 I\'m Interested';
+                currentProduct.interest_count = Math.max(0, (currentProduct.interest_count || 0) - 1);
             } else {
-                // Add interest
                 interestedList[currentProduct.id] = true;
                 interestBtn.classList.add('active');
                 interestBtn.innerHTML = '✓ Interested';
+                currentProduct.interest_count = (currentProduct.interest_count || 0) + 1;
             }
-            
+
+            updateModalInterestLabel();
             localStorage.setItem('interestedProducts', JSON.stringify(interestedList));
+
+            // Sync with backend database
+            try {
+                const response = await fetch(`/api/products/${currentProduct.id}/interest`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    currentProduct.interest_count = data.interest_count;
+                    updateModalInterestLabel();
+
+                    // Update cached count in main array
+                    const cached = allProducts.find(p => p.id === currentProduct.id);
+                    if (cached) cached.interest_count = data.interest_count;
+                }
+            } catch (err) {
+                console.error('Error syncing interest counts:', err);
+            }
         }
 
         // Listing Creation Modal Open / Close

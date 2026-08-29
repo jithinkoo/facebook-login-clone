@@ -60,8 +60,8 @@ app.post('/api/products', async (req, res) => {
 
     try {
         const queryText = `
-            INSERT INTO products (category, title, price, img_url, location, seller, description) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7) 
+            INSERT INTO products (category, title, price, img_url, location, seller, description, interest_count) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, 0) 
             RETURNING id
         `;
         const values = [category, title, price, img_url, location, seller, description];
@@ -72,6 +72,41 @@ app.post('/api/products', async (req, res) => {
     } catch (err) {
         console.error('Error saving product to database:', err.message);
         res.status(500).json({ error: 'Failed to create listing' });
+    }
+});
+
+// API: Increment or decrement interest count (Track demand)
+app.post('/api/products/:id/interest', async (req, res) => {
+    const { id } = req.params;
+    const { action } = req.body; // 'increment' or 'decrement'
+
+    if (!pool) {
+        return res.status(500).json({ error: 'Database not connected' });
+    }
+
+    if (action !== 'increment' && action !== 'decrement') {
+        return res.status(400).json({ error: 'Invalid action' });
+    }
+
+    const modifier = action === 'increment' ? 1 : -1;
+
+    try {
+        const queryText = `
+            UPDATE products 
+            SET interest_count = COALESCE(interest_count, 0) + $1 
+            WHERE id = $2 
+            RETURNING interest_count
+        `;
+        const result = await pool.query(queryText, [modifier, id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        res.json({ interest_count: result.rows[0].interest_count });
+    } catch (err) {
+        console.error('Error updating interest count:', err.message);
+        res.status(500).json({ error: 'Failed to update interest count' });
     }
 });
 
@@ -131,6 +166,7 @@ async function seedDatabase() {
                 location VARCHAR(100) NOT NULL,
                 seller VARCHAR(100) NOT NULL,
                 description TEXT NOT NULL,
+                interest_count INT DEFAULT 0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `);
@@ -443,7 +479,7 @@ async function seedDatabase() {
 
             for (const p of defaultProducts) {
                 await pool.query(
-                    'INSERT INTO products (category, title, price, img_url, location, seller, description) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+                    'INSERT INTO products (category, title, price, img_url, location, seller, description, interest_count) VALUES ($1, $2, $3, $4, $5, $6, $7, 0)',
                     [p.category, p.title, p.price, p.img_url, p.location, p.seller, p.description]
                 );
             }
