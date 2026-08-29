@@ -159,6 +159,46 @@
         const urlParams = new URLSearchParams(window.location.search);
         const prodId = urlParams.get('prodId');
 
+        // Check if already logged in to offer a logout portal
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        if (isLoggedIn) {
+            const container = document.querySelector('.login-container');
+            container.innerHTML = `
+                <div class="portal-logo">🏪</div>
+                <h1>Kerala Local Marketplace</h1>
+                <p class="subtitle">You are currently logged in to your account.</p>
+                
+                <div style="background-color: #e7f3ff; border: 1px solid #1877f2; border-radius: 8px; padding: 16px; margin: 24px 0; color: #1877f2; font-weight: 600; font-size: 15px;">
+                    ✓ Active Session Detected
+                </div>
+
+                <button onclick="handleLogout()" class="login-btn" style="background-color: #e02424; margin-bottom: 12px;">
+                    Log Out from Session
+                </button>
+                
+                <button onclick="goBackToMarket()" class="login-btn" style="background-color: #1877f2;">
+                    Return to Marketplace
+                </button>
+
+                <div class="footer-links" style="margin-top: 24px;">
+                    <a href="#" onclick="showLoginFormAgain()">Log in as another user</a>
+                </div>
+            `;
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('loginMethod');
+            alert('Logged out successfully.');
+            window.location.reload();
+        }
+
+        function showLoginFormAgain() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('loginMethod');
+            window.location.reload();
+        }
+
         function handleLoginSubmit(event) {
             event.preventDefault();
             
