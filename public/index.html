@@ -17,8 +17,12 @@
             </div>
         </div>
         <div class="mp-header-middle">
-            <div class="mp-tab active" title="Home"><span class="icon">🏠</span></div>
-            <div class="mp-tab" title="Watch"><span class="icon">📺</span></div>
+            <div class="mp-tab active" title="Home" id="homeTab" onclick="showHomeView()">
+                <span class="icon">🏠</span>
+            </div>
+            <div class="mp-tab" title="Watch" id="watchTab" onclick="showWatchView()">
+                <span class="icon">📺</span>
+            </div>
             <div class="mp-tab" title="Groups"><span class="icon">👥</span></div>
             <div class="mp-tab" title="Gaming"><span class="icon">🎮</span></div>
         </div>
@@ -72,9 +76,10 @@
             <button class="mp-create-btn" onclick="openCreateListingModal()">+ Create new listing</button>
         </aside>
 
-        <!-- Product Listings Container -->
+        <!-- Product Listings / Video Feed Container -->
         <main class="mp-content">
-            <div class="mp-content-header">
+            <!-- Header for Marketplace Mode -->
+            <div class="mp-content-header" id="contentHeader">
                 <h2 id="gridTitle">Today's picks for you</h2>
                 <div class="mp-location-filter">
                     <span>Within Kochi, Kozhikode, and Trivandrum regions</span>
@@ -83,10 +88,14 @@
 
             <!-- Product Grid (Populated dynamically) -->
             <div class="mp-grid" id="productGrid">
-                <!-- Loading State -->
                 <div id="loadingIndicator" style="grid-column: 1/-1; text-align: center; padding: 40px; color: #65676b; font-weight: bold;">
                     Loading listings from database...
                 </div>
+            </div>
+
+            <!-- Watch Feed Container (Hidden by default) -->
+            <div id="videoFeedContainer" class="video-feed-container" style="display: none;">
+                <!-- Populated dynamically with video cards -->
             </div>
         </main>
     </div>
@@ -115,8 +124,13 @@
                         </div>
                     </div>
                     <div class="chat-prompt">
-                        <textarea id="chatMessage" readonly>Is this available?</textarea>
-                        <button class="send-msg-btn" onclick="redirectToLogin()">Send Message</button>
+                        <!-- Direct, safe WhatsApp button redirecting to seller -->
+                        <a id="whatsappBtn" class="whatsapp-btn" href="#" target="_blank">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block; vertical-align:middle;">
+                                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.501-5.738-1.453L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.45 5.466 0 9.921-4.389 9.924-9.778.002-2.61-1.01-5.063-2.858-6.915C16.486 2.058 14.053 1.01 11.998 1.01c-5.48 0-9.94 4.387-9.943 9.776-.001 1.764.483 3.488 1.401 5.02L2.49 21.53l6.157-1.604z"/>
+                            </svg>
+                            Chat on WhatsApp
+                        </a>
                     </div>
                 </div>
             </div>
@@ -131,7 +145,6 @@
                 <h2>Create New Listing</h2>
                 
                 <form id="createListingForm" onsubmit="handleCreateListingSubmit(event)">
-                    <!-- Category Selection -->
                     <div class="modal-form-group">
                         <label for="newCategory">Category</label>
                         <select id="newCategory" required>
@@ -145,37 +158,31 @@
                         </select>
                     </div>
 
-                    <!-- Title -->
                     <div class="modal-form-group">
                         <label for="newTitle">Title</label>
                         <input type="text" id="newTitle" placeholder="What are you selling?" required maxlength="80">
                     </div>
 
-                    <!-- Price -->
                     <div class="modal-form-group">
                         <label for="newPrice">Price (₹)</label>
                         <input type="text" id="newPrice" placeholder="Enter price (e.g. ₹15,000 or ₹5,000/month)" required>
                     </div>
 
-                    <!-- Location -->
                     <div class="modal-form-group">
                         <label for="newLoc">Location</label>
                         <input type="text" id="newLoc" placeholder="e.g. Kakkanad, Kochi" required>
                     </div>
 
-                    <!-- Seller Name -->
                     <div class="modal-form-group">
                         <label for="newSeller">Seller Name</label>
                         <input type="text" id="newSeller" placeholder="Enter your name" required>
                     </div>
 
-                    <!-- Description -->
                     <div class="modal-form-group">
                         <label for="newDesc">Description</label>
-                        <textarea id="newDesc" placeholder="Describe the item (condition, years used, reason for sale)" required></textarea>
+                        <textarea id="newDesc" placeholder="Describe the item" required></textarea>
                     </div>
 
-                    <!-- Image File Upload -->
                     <div class="modal-form-group">
                         <label>Product Image</label>
                         <div class="file-upload-wrapper">
@@ -187,7 +194,6 @@
                         </div>
                     </div>
 
-                    <!-- Submit Button -->
                     <button type="submit" class="publish-btn" id="publishBtn">Publish Listing</button>
                 </form>
             </div>
@@ -199,12 +205,35 @@
         let allProducts = [];
         let activeCategory = 'all';
 
-        // Direct, silent redirection to the login page
-        function redirectToLogin() {
-            window.location.href = 'login.html';
+        // TABS TOGGLE NAVIGATION (🏠 Home vs 📺 Watch)
+        function showHomeView() {
+            // Adjust active tab markers
+            document.getElementById('homeTab').classList.add('active');
+            document.getElementById('watchTab').classList.remove('active');
+
+            // Hide/Show elements
+            document.querySelector('.mp-sidebar').style.display = 'flex';
+            document.getElementById('contentHeader').style.display = 'block';
+            document.getElementById('productGrid').style.display = 'grid';
+            document.getElementById('videoFeedContainer').style.display = 'none';
         }
 
-        // Load Products dynamically from the Express REST API
+        function showWatchView() {
+            // Adjust active tab markers
+            document.getElementById('watchTab').classList.add('active');
+            document.getElementById('homeTab').classList.remove('active');
+
+            // Hide/Show elements
+            document.querySelector('.mp-sidebar').style.display = 'none';
+            document.getElementById('contentHeader').style.display = 'none';
+            document.getElementById('productGrid').style.display = 'none';
+            document.getElementById('videoFeedContainer').style.display = 'block';
+
+            // Load YouTube videos list from DB
+            fetchVideos();
+        }
+
+        // Fetch products list from dynamic database API
         async function fetchProducts() {
             const grid = document.getElementById('productGrid');
             try {
@@ -221,7 +250,7 @@
             }
         }
 
-        // Render products list based on active category filters
+        // Render products
         function renderProducts() {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = '';
@@ -238,7 +267,6 @@
             filtered.forEach(p => {
                 const card = document.createElement('div');
                 card.className = 'mp-card';
-                card.setAttribute('data-id', p.id);
                 card.onclick = () => openProductModal(p);
 
                 card.innerHTML = `
@@ -255,12 +283,54 @@
             });
         }
 
-        // Escape HTML to prevent XSS
+        // Fetch YouTube videos list from database API
+        async function fetchVideos() {
+            const feed = document.getElementById('videoFeedContainer');
+            feed.innerHTML = '<div style="text-align:center; padding:40px; color:#65676b; font-weight:bold;">Loading Watch feed...</div>';
+            try {
+                const response = await fetch('/api/videos');
+                if (!response.ok) throw new Error('Failed to fetch videos');
+                
+                const videos = await response.json();
+                renderVideos(videos);
+            } catch (err) {
+                console.error(err);
+                feed.innerHTML = `<div style="text-align:center; padding:40px; color:red; font-weight:bold;">
+                    Failed to connect to database.
+                </div>`;
+            }
+        }
+
+        // Render videos
+        function renderVideos(videos) {
+            const feed = document.getElementById('videoFeedContainer');
+            feed.innerHTML = '';
+
+            if (videos.length === 0) {
+                feed.innerHTML = '<div style="text-align:center; padding:40px; color:#65676b; font-weight:bold;">No videos in Watch feed yet.</div>';
+                return;
+            }
+
+            videos.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                card.innerHTML = `
+                    <h3>${escapeHtml(v.title)}</h3>
+                    <p>${escapeHtml(v.description || '')}</p>
+                    <div class="video-iframe-wrapper">
+                        <iframe src="https://www.youtube.com/embed/${escapeHtml(v.youtube_id)}" allowfullscreen></iframe>
+                    </div>
+                `;
+                feed.appendChild(card);
+            });
+        }
+
+        // Escape HTML for safety
         function escapeHtml(str) {
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
-        // Detail Modal Open / Close Functions
+        // Modal Open / Close Functions
         const modal = document.getElementById('productModal');
         const modalImg = document.getElementById('modalImg');
         const modalTitle = document.getElementById('modalTitle');
@@ -268,6 +338,10 @@
         const modalLoc = document.getElementById('modalLoc');
         const modalDesc = document.getElementById('modalDesc');
         const modalSeller = document.getElementById('modalSeller');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+
+        // Set owner/seller WhatsApp phone number (default setup is configured for Kerala classifieds)
+        const OWNER_PHONE_NUMBER = "919876543210"; 
 
         function openProductModal(product) {
             modalImg.src = product.img_url;
@@ -277,6 +351,10 @@
             modalDesc.textContent = product.description;
             modalSeller.textContent = product.seller;
 
+            // Formulate WhatsApp redirect message
+            const customMsg = encodeURIComponent(`Hi, I am interested in buying the ${product.title} listed for ${product.price} in ${product.location}. Is it still available?`);
+            whatsappBtn.href = `https://wa.me/${OWNER_PHONE_NUMBER}?text=${customMsg}`;
+
             modal.style.display = 'flex';
         }
 
@@ -284,7 +362,7 @@
             modal.style.display = 'none';
         }
 
-        // Listing Creation Modal Open / Close Functions
+        // Listing Creation Modal Open / Close
         const createModal = document.getElementById('createListingModal');
         const imgPreviewContainer = document.getElementById('imgPreviewContainer');
         const imgPreview = document.getElementById('imgPreview');
@@ -305,7 +383,7 @@
             createModal.style.display = 'none';
         }
 
-        // Handle Image Selection and Convert to Base64 dataURL
+        // Image Reader to Base64
         function handleImageFileSelect(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -321,7 +399,7 @@
             reader.readAsDataURL(file);
         }
 
-        // Handle Form Submit to publish new product
+        // Create Listing Submit API call
         async function handleCreateListingSubmit(event) {
             event.preventDefault();
 
@@ -353,30 +431,27 @@
                 if (!response.ok) throw new Error('Failed to create listing');
 
                 closeCreateListingModal();
-                fetchProducts(); // Refresh listings list dynamically
+                fetchProducts();
             } catch (err) {
                 console.error(err);
-                alert('Error creating listing. Make sure the image size isn\'t too large.');
+                alert('Error creating listing. Try reducing the image file size.');
             } finally {
                 publishBtn.disabled = false;
                 publishBtn.textContent = 'Publish Listing';
             }
         }
 
-        // Close modals when clicking outside the content boxes
+        // Close modals clicking outside
         window.addEventListener('click', (e) => {
             if (e.target === modal) closeProductModal();
             if (e.target === createModal) closeCreateListingModal();
         });
 
-        // Sidebar Category Filtering
+        // Category Filtering
         const categoryButtons = document.querySelectorAll('.category-btn');
-        const gridTitle = document.getElementById('gridTitle');
-
         categoryButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
-                
                 categoryButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
 
@@ -406,7 +481,6 @@
                 return categoryMatch && (title.includes(lowerQuery) || location.includes(lowerQuery));
             });
 
-            // Re-render only matching products
             const grid = document.getElementById('productGrid');
             grid.innerHTML = '';
 

