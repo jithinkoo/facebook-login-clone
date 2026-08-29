@@ -457,21 +457,9 @@ body {
     padding-top: 16px;
 }
 
-.chat-prompt textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #dddfe2;
-    border-radius: 8px;
-    resize: none;
-    font-size: 14px;
-    outline: none;
-    background-color: #f0f2f5;
-    color: #1c1e21;
-}
-
-/* Green WhatsApp Button Style */
-.whatsapp-btn {
-    background-color: #25D366;
+/* Blue Interested Toggle Button Style */
+.interest-btn {
+    background-color: #1877f2;
     border: none;
     border-radius: 6px;
     color: #ffffff;
@@ -484,12 +472,18 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: background-color 0.1s ease;
-    text-decoration: none;
+    transition: all 0.15s ease;
+    width: 100%;
 }
 
-.whatsapp-btn:hover {
-    background-color: #20ba5a;
+.interest-btn:hover {
+    background-color: #166fe5;
+}
+
+.interest-btn.active {
+    background-color: #e7f3ff;
+    color: #1877f2;
+    border: 1px solid #1877f2;
 }
 
 
