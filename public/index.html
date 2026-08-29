@@ -143,8 +143,16 @@
                         </div>
                     </div>
                     <div class="chat-prompt">
-                        <!-- Interested toggle button -->
-                        <button id="interestBtn" class="interest-btn" onclick="toggleInterest()">👍 Like</button>
+                        <!-- Like toggle button (visible if logged in) -->
+                        <button id="interestBtn" class="interest-btn" onclick="toggleInterest()" style="display: none;">👍 Like</button>
+                        
+                        <!-- Auth prompt (visible if logged out) -->
+                        <div id="authPromptDetails" style="display: none; text-align: center; width: 100%;">
+                            <p style="font-size: 13px; color: #65676b; margin-bottom: 10px; line-height: 18px;">
+                                You must be signed in to like this item.
+                            </p>
+                            <button class="interest-btn" onclick="triggerLoginFromProduct()" style="background-color: #1877f2; color: #ffffff; cursor: pointer;">Sign In to Like</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -358,7 +366,7 @@
                 const card = document.createElement('div');
                 card.className = 'mp-card';
                 card.setAttribute('data-id', p.id);
-                card.onclick = () => checkLoginAndOpen(p);
+                card.onclick = () => openProductModal(p);
 
                 card.innerHTML = `
                     <div class="mp-card-img-container">
@@ -587,17 +595,33 @@
 
             updateModalInterestLabel();
 
-            // Load interest toggle state from localStorage
-            const interestedList = JSON.parse(localStorage.getItem('interestedProducts') || '{}');
-            if (interestedList[product.id]) {
-                interestBtn.classList.add('active');
-                interestBtn.innerHTML = '✓ Liked';
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const authPrompt = document.getElementById('authPromptDetails');
+
+            if (isLoggedIn) {
+                interestBtn.style.display = 'block';
+                authPrompt.style.display = 'none';
+
+                // Load interest toggle state from localStorage
+                const interestedList = JSON.parse(localStorage.getItem('interestedProducts') || '{}');
+                if (interestedList[product.id]) {
+                    interestBtn.classList.add('active');
+                    interestBtn.innerHTML = '✓ Liked';
+                } else {
+                    interestBtn.classList.remove('active');
+                    interestBtn.innerHTML = '👍 Like';
+                }
             } else {
-                interestBtn.classList.remove('active');
-                interestBtn.innerHTML = '👍 Like';
+                interestBtn.style.display = 'none';
+                authPrompt.style.display = 'block';
             }
 
             modal.style.display = 'flex';
+        }
+
+        function triggerLoginFromProduct() {
+            openSignInModal();
+            pendingProductToOpen = currentProduct;
         }
 
         function closeProductModal() {
@@ -851,7 +875,7 @@
                 const card = document.createElement('div');
                 card.className = 'mp-card';
                 card.setAttribute('data-id', p.id);
-                card.onclick = () => checkLoginAndOpen(p);
+                card.onclick = () => openProductModal(p);
                 card.innerHTML = `
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="${p.img_url}" alt="${escapeHtml(p.title)}">
@@ -860,7 +884,7 @@
                         <div class="mp-card-price">${escapeHtml(p.price)}</div>
                         <div class="mp-card-title">${escapeHtml(p.title)}</div>
                         <div class="mp-card-location">${escapeHtml(p.location)}</div>
-                        ${(p.interest_count || 0) > 0 ? `<div class="card-interest-tag">🔥 ${p.interest_count} interested</div>` : ''}
+                        ${(p.interest_count || 0) > 0 ? `<div class="card-interest-tag">👍 ${p.interest_count} ${p.interest_count === 1 ? 'like' : 'likes'}</div>` : ''}
                     </div>
                 `;
                 grid.appendChild(card);
