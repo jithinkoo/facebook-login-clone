@@ -688,6 +688,142 @@ footer {
     background-color: #166fe5;
 }
 
+
+/* ========================================================
+   CREATE LISTING FORM SPECIFIC STYLES (MODAL)
+   ======================================================== */
+.creation-modal-content {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    position: relative;
+    max-height: 90vh;
+}
+
+.creation-modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+.creation-modal-body h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1c1e21;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+    text-align: left;
+}
+
+.modal-form-group label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #1c1e21;
+}
+
+.modal-form-group input,
+.modal-form-group select,
+.modal-form-group textarea {
+    padding: 10px;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+}
+
+.modal-form-group input:focus,
+.modal-form-group select:focus,
+.modal-form-group textarea:focus {
+    border-color: #1877f2;
+}
+
+.modal-form-group textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+/* Custom File Upload */
+.file-upload-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+}
+
+.btn-file-upload {
+    border: 1px dashed #1877f2;
+    color: #1877f2;
+    background-color: #f0f8ff;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+}
+
+.file-upload-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.preview-container {
+    margin-top: 10px;
+    max-height: 120px;
+    display: none;
+    justify-content: center;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #f0f2f5;
+}
+
+.preview-container img {
+    height: 120px;
+    object-fit: contain;
+}
+
+.publish-btn {
+    background-color: #42b72a;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.publish-btn:hover {
+    background-color: #36a420;
+}
+
+.publish-btn:disabled {
+    background-color: #e4e6eb;
+    color: #bcc0c4;
+    cursor: not-allowed;
+}
+
+
 /* ========================================================
    RESPONSIVE DESIGN / MEDIA QUERIES
    ======================================================== */

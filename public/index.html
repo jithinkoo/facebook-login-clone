@@ -23,8 +23,8 @@
             <div class="mp-tab" title="Gaming"><span class="icon">🎮</span></div>
         </div>
         <div class="mp-header-right">
-            <button class="mp-nav-btn" title="Messenger">💬</button>
-            <button class="mp-nav-btn" title="Notifications">🔔</button>
+            <div class="mp-nav-btn" title="Messenger">💬</div>
+            <div class="mp-nav-btn" title="Notifications">🔔</div>
             <div class="mp-profile-pic"></div>
         </div>
     </header>
@@ -69,7 +69,7 @@
                 </a>
             </nav>
             <div class="divider"></div>
-            <button class="mp-create-btn" onclick="redirectToLogin()">+ Create new listing</button>
+            <button class="mp-create-btn" onclick="openCreateListingModal()">+ Create new listing</button>
         </aside>
 
         <!-- Product Listings Container -->
@@ -81,633 +81,11 @@
                 </div>
             </div>
 
-            <!-- Product Grid -->
+            <!-- Product Grid (Populated dynamically) -->
             <div class="mp-grid" id="productGrid">
-                <!-- Listing 1: Yamaha RX100 (Kochi) -->
-                <div class="mp-card" data-category="bikes" 
-                     data-title="Yamaha RX100 (1996 model, Black, Original engine, FC clear)" 
-                     data-price="₹15,000" 
-                     data-img="https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=500&auto=format&fit=crop" 
-                     data-loc="Aluva, Kochi" 
-                     data-seller="Akhil Dev" 
-                     data-desc="Selling my vintage Yamaha RX100 black color. 1996 model. Engine is in pristine condition (original Japanese bore). FC is clear up to 2028. Insurance active. Urgent sale because I am moving abroad next week."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=500&auto=format&fit=crop" alt="Yamaha RX100">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹15,000</div>
-                        <div class="mp-card-title">Yamaha RX100 (1996 model, Black, Original engine, FC clear)</div>
-                        <div class="mp-card-location">Aluva, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 2: iPhone 15 Pro Max -->
-                <div class="mp-card" data-category="phones" 
-                     data-title="iPhone 15 Pro Max 256GB - Blue Titanium" 
-                     data-price="₹24,999" 
-                     data-img="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=500&auto=format&fit=crop" 
-                     data-loc="Kaloor, Kochi" 
-                     data-seller="Vijay Sundar" 
-                     data-desc="Brand new condition iPhone 15 Pro Max 256GB Blue Titanium. Indian unit, 10 months warranty remaining. Battery health 98%. Scratchless, always used with screen guard and case. Box and invoice available. Fixed price."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=500&auto=format&fit=crop" alt="iPhone 15 Pro Max">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹24,999</div>
-                        <div class="mp-card-title">iPhone 15 Pro Max 256GB - Blue Titanium (1 Year Warranty)</div>
-                        <div class="mp-card-location">Kaloor, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 3: Mahindra Thar -->
-                <div class="mp-card" data-category="cars" 
-                     data-title="Mahindra Thar LX Diesel (2021 Model, KL 11)" 
-                     data-price="₹2,90,000" 
-                     data-img="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=500&auto=format&fit=crop" 
-                     data-loc="Kozhikode, Kerala" 
-                     data-seller="Jithin Das" 
-                     data-desc="2021 Mahindra Thar LX 4-WD Diesel Manual. Convertible hard top. Single owner, KL-11 registration. Driven 18,000 km. Excellent condition, new off-road tires. Urgent cash sale."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=500&auto=format&fit=crop" alt="Mahindra Thar">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹2,90,000</div>
-                        <div class="mp-card-title">Mahindra Thar LX Diesel (2021 Model, KL 11, 4x4)</div>
-                        <div class="mp-card-location">Kozhikode, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 4: Toyota Innova Crysta -->
-                <div class="mp-card" data-category="cars" 
-                     data-title="Toyota Innova Crysta 2.4 VX Diesel (2018 Model, KL 08)" 
-                     data-price="₹3,50,000" 
-                     data-img="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=500&auto=format&fit=crop" 
-                     data-loc="Thrissur, Kerala" 
-                     data-seller="Harisree Venu" 
-                     data-desc="Toyota Innova Crysta 2.4 VX Manual. 7 Seater, Diesel. 2018 model. Single owner, KL-08 registration. Regular company services. Excellent chilling dual AC. Family car."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=500&auto=format&fit=crop" alt="Innova Crysta">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹3,50,000</div>
-                        <div class="mp-card-title">Toyota Innova Crysta 2.4 VX Diesel (7 Seater, KL-08)</div>
-                        <div class="mp-card-location">Thrissur, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 5: Kanchipuram Silk Saree -->
-                <div class="mp-card" data-category="clothing" 
-                     data-title="Pure Kanchipuram Designer Silk Saree - Wedding Special" 
-                     data-price="₹1,200" 
-                     data-img="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop" 
-                     data-loc="Kottayam, Kerala" 
-                     data-seller="Deepa Lakshmi" 
-                     data-desc="Pure Kanchipuram silk saree with rich zari border and beautiful designer pallu. Directly purchased from traditional weavers. Perfect for weddings and festivals. Silk mark certified. Unopened box piece."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop" alt="Kanchipuram Saree">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹1,200</div>
-                        <div class="mp-card-title">Pure Kanchipuram Designer Silk Saree - Wedding Special (Kottayam)</div>
-                        <div class="mp-card-location">Kottayam, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 6: Gold Jewellery -->
-                <div class="mp-card" data-category="jewellery" 
-                     data-title="22k Gold Plated Traditional Choker Necklace Set" 
-                     data-price="₹750" 
-                     data-img="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&auto=format&fit=crop" 
-                     data-loc="Kadavanthra, Kochi" 
-                     data-seller="Sruthi Nair" 
-                     data-desc="Elegant 22k gold plated traditional choker necklace set. Comes with matching earrings. Handcrafted antique finish design. Safe for sensitive skin. Perfect for traditional functions and bridal wear."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&auto=format&fit=crop" alt="Gold Jewellery">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹750</div>
-                        <div class="mp-card-title">22k Gold Plated Traditional Choker Necklace Set with Earrings</div>
-                        <div class="mp-card-location">Kadavanthra, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 7: Royal Enfield Classic 350 -->
-                <div class="mp-card" data-category="bikes" 
-                     data-title="Royal Enfield Classic 350 (2022 model, Matte Black)" 
-                     data-price="₹35,000" 
-                     data-img="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=500&auto=format&fit=crop" 
-                     data-loc="Edappally, Kochi" 
-                     data-seller="Justin Joseph" 
-                     data-desc="Royal Enfield Classic 350 Matte Black 2022 model. Dual-channel ABS. 9,500 km run. Well maintained, serviced on time. Stock silencer, new battery, zero issues. Urgent cash need."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=500&auto=format&fit=crop" alt="Royal Enfield Classic 350">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹35,000</div>
-                        <div class="mp-card-title">Royal Enfield Classic 350 (2022, Kerala Registration, Black)</div>
-                        <div class="mp-card-location">Edappally, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 8: Ladies Handbag -->
-                <div class="mp-card" data-category="clothing" 
-                     data-title="Designer Leather Handbag Combo for Women" 
-                     data-price="₹499" 
-                     data-img="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&auto=format&fit=crop" 
-                     data-loc="Kozhikode, Kerala" 
-                     data-seller="Priya Rajan" 
-                     data-desc="Premium quality designer leather handbag set for women. Combo pack includes 1 large shoulder bag, 1 sling bag, and 1 pouch. Durable material, spacious compartments, stylish gold-tone zippers."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&auto=format&fit=crop" alt="Ladies Handbag">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹499</div>
-                        <div class="mp-card-title">Designer Leather Handbag Combo for Women (Set of 3 bags)</div>
-                        <div class="mp-card-location">Kozhikode, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 9: KTM Duke 390 -->
-                <div class="mp-card" data-category="bikes" 
-                     data-title="2021 KTM Duke 390 BS6" 
-                     data-price="₹45,000" 
-                     data-img="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=500&auto=format&fit=crop" 
-                     data-loc="Trivandrum, Kerala" 
-                     data-seller="Nithin Mohan" 
-                     data-desc="2021 KTM Duke 390. BS6 version. First owner, excellent power and pickup. Tires replaced recently. Fully serviced at KTM showroom. Clear papers. Price is final, no low ballers."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=500&auto=format&fit=crop" alt="KTM Duke">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹45,000</div>
-                        <div class="mp-card-title">2021 KTM Duke 390 (Double Disc, ABS, Urgent Sale for cash)</div>
-                        <div class="mp-card-location">Trivandrum, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 10: Cosmetics Makeup Kit -->
-                <div class="mp-card" data-category="jewellery" 
-                     data-title="Professional Makeup Combo Gift Kit (Lakme / MAC)" 
-                     data-price="₹850" 
-                     data-img="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500&auto=format&fit=crop" 
-                     data-loc="Kakkanad, Kochi" 
-                     data-seller="Anjali Krishna" 
-                     data-desc="Professional makeup kit combo. Includes items from MAC, Lakme, and Maybelline (Foundation, Lipstick, Kajal, Eyeliner, Eyeshadow Palette, Primer, Concealer). Brand new sealed pack. Great for gifts."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500&auto=format&fit=crop" alt="Makeup Kit">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹850</div>
-                        <div class="mp-card-title">Professional Makeup Combo Gift Kit (Lakme / MAC set of 12 items)</div>
-                        <div class="mp-card-location">Kakkanad, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 11: Maruti Swift -->
-                <div class="mp-card" data-category="cars" 
-                     data-title="Maruti Suzuki Swift VXI (2019 model, KL 07)" 
-                     data-price="₹1,20,000" 
-                     data-img="https://images.unsplash.com/photo-1617788138017-80ad40651399?w=500&auto=format&fit=crop" 
-                     data-loc="Edappally, Kochi" 
-                     data-seller="Karthik Raja" 
-                     data-desc="2019 Maruti Suzuki Swift VXI. Single owner, petrol manual. Driven only 24,000 km. Regularly serviced at authorized Maruti service center. Chilling AC, new tires, zero-depreciation insurance active. Price slightly negotiable."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1617788138017-80ad40651399?w=500&auto=format&fit=crop" alt="Suzuki Swift">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹1,20,000</div>
-                        <div class="mp-card-title">Maruti Suzuki Swift VXI (2019 model, Silver, Single Owner, Low Run)</div>
-                        <div class="mp-card-location">Edappally, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 12: Independent House Kochi -->
-                <div class="mp-card" data-category="rentals" 
-                     data-title="Cozy 1 BHK Independent House for Rent" 
-                     data-price="₹5,000/month" 
-                     data-img="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=500&auto=format&fit=crop" 
-                     data-loc="Edappally, Kochi" 
-                     data-seller="Joseph Varghese" 
-                     data-desc="Independent 1 BHK house for rent in Edappally, Kochi. Very close to Metro Station and Lulu Mall. Peaceful residential area. 24 hours well water, separate electricity meter, ideal for single professionals or small family."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=500&auto=format&fit=crop" alt="1 BHK House">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹5,000/month</div>
-                        <div class="mp-card-title">Cozy 1 BHK Independent House for Rent near metro station</div>
-                        <div class="mp-card-location">Edappally, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 13: Honda Activa 6G -->
-                <div class="mp-card" data-category="bikes" 
-                     data-title="Honda Activa 6G - Grey Colour (2021 Model)" 
-                     data-price="₹25,000" 
-                     data-img="https://images.unsplash.com/photo-1622185135505-2d795003994a?w=500&auto=format&fit=crop" 
-                     data-loc="Vytilla, Kochi" 
-                     data-seller="Rahul K." 
-                     data-desc="Honda Activa 6G Grey color, 2021 model. Single owner, low mileage. Chilling engine run, brand new tires. All documents clear. Perfect scooter for ladies and family commute."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1622185135505-2d795003994a?w=500&auto=format&fit=crop" alt="Honda Activa">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹25,000</div>
-                        <div class="mp-card-title">Honda Activa 6G - Grey Colour (2021 Model, Single Owner)</div>
-                        <div class="mp-card-location">Vytilla, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 14: Vespa Scooter -->
-                <div class="mp-card" data-category="bikes" 
-                     data-title="Vespa SXL 150 - Red Colour (BS6 Model)" 
-                     data-price="₹38,000" 
-                     data-img="https://images.unsplash.com/photo-1605647540924-852290f6b0d5?w=500&auto=format&fit=crop" 
-                     data-loc="Kaloor, Kochi" 
-                     data-seller="Anandhu S." 
-                     data-desc="Vespa SXL 150 Red colour. BS6 model, well maintained. 12,000 km run. Selling urgently because I am moving to Bangalore next month. Retro look, perfect styling."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1605647540924-852290f6b0d5?w=500&auto=format&fit=crop" alt="Vespa Scooter">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹38,000</div>
-                        <div class="mp-card-title">Vespa SXL 150 - Red Colour (2020 Model, Disc Brake)</div>
-                        <div class="mp-card-location">Kaloor, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 15: iPhone 13 Pink -->
-                <div class="mp-card" data-category="phones" 
-                     data-title="iPhone 13 128GB - Cute Pink Colour" 
-                     data-price="₹14,000" 
-                     data-img="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=500&auto=format&fit=crop" 
-                     data-loc="Kozhikode, Kerala" 
-                     data-seller="Meera Nair" 
-                     data-desc="iPhone 13 Pink color 128GB storage. 1 year old, battery health 92%. Scratchless body, looks brand new. Comes with box, original charging cable, and 3 premium designer cases for free."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=500&auto=format&fit=crop" alt="iPhone 13 Pink">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹14,000</div>
-                        <div class="mp-card-title">iPhone 13 128GB - Cute Pink (Box & Case Included)</div>
-                        <div class="mp-card-location">Kozhikode, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 16: OnePlus 11R -->
-                <div class="mp-card" data-category="phones" 
-                     data-title="OnePlus 11R 5G (256GB - Galactic Silver)" 
-                     data-price="₹12,500" 
-                     data-img="https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&auto=format&fit=crop" 
-                     data-loc="Palakkad, Kerala" 
-                     data-seller="Harish R." 
-                     data-desc="OnePlus 11R 5G 16GB RAM, 256GB storage. Galactic Silver color. Super fast 100W charging (box and charger included). 8 months old. Bill available."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&auto=format&fit=crop" alt="OnePlus 11R">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹12,500</div>
-                        <div class="mp-card-title">OnePlus 11R 5G (16GB RAM, 256GB Storage, Silver)</div>
-                        <div class="mp-card-location">Palakkad, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 17: Samsung S23 Ultra -->
-                <div class="mp-card" data-category="phones" 
-                     data-title="Samsung Galaxy S23 Ultra 5G (Phantom Black)" 
-                     data-price="₹28,000" 
-                     data-img="https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&auto=format&fit=crop" 
-                     data-loc="Trivandrum, Kerala" 
-                     data-seller="Abhijith S." 
-                     data-desc="Samsung Galaxy S23 Ultra Phantom Black. 12GB RAM, 256GB storage. Comes with original S-Pen, bill, and box. Used 6 months. Mint condition. Super camera quality."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&auto=format&fit=crop" alt="Samsung S23 Ultra">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹28,000</div>
-                        <div class="mp-card-title">Samsung Galaxy S23 Ultra 5G (Phantom Black, 12GB/256GB)</div>
-                        <div class="mp-card-location">Trivandrum, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 18: Redmi Note 12 Pro -->
-                <div class="mp-card" data-category="phones" 
-                     data-title="Redmi Note 12 Pro 5G (Onyx Black)" 
-                     data-price="₹6,500" 
-                     data-img="https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&auto=format&fit=crop" 
-                     data-loc="Kollam, Kerala" 
-                     data-seller="Akhil Raj" 
-                     data-desc="Redmi Note 12 Pro 5G (8GB/128GB). Onyx Black. 67W fast charging. Box and charger available. Scratchless screen, perfect battery health."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&auto=format&fit=crop" alt="Redmi Note 12 Pro">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹6,500</div>
-                        <div class="mp-card-title">Redmi Note 12 Pro 5G (8GB RAM, 128GB Storage, Kollam)</div>
-                        <div class="mp-card-location">Kollam, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 19: Ladies PG Hostel Kakkanad -->
-                <div class="mp-card" data-category="rentals" 
-                     data-title="Luxury Ladies PG Hostel near InfoPark - Homestyle Food" 
-                     data-price="₹3,500/month" 
-                     data-img="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=500&auto=format&fit=crop" 
-                     data-loc="Kakkanad, Kochi" 
-                     data-seller="Sangeetha Lakshmi" 
-                     data-desc="Luxury ladies hostel/PG accommodation near InfoPark Kakkanad. Homestyle Kerala food included 3 times. Free Wi-Fi, washing machine, fridge, CCTV, 24x7 security. Walkable to major IT parks."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=500&auto=format&fit=crop" alt="Ladies PG Kakkanad">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹3,500/month</div>
-                        <div class="mp-card-title">Luxury Ladies PG Hostel near InfoPark (Food Included)</div>
-                        <div class="mp-card-location">Kakkanad, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 20: Embroidered Kurti Suit Set -->
-                <div class="mp-card" data-category="clothing" 
-                     data-title="Georgette Embroidered Anarkali Kurti Suit Set" 
-                     data-price="₹399" 
-                     data-img="https://images.unsplash.com/photo-1610030469668-93535c17b6b3?w=500&auto=format&fit=crop" 
-                     data-loc="Ernakulam, Kochi" 
-                     data-seller="Priyanka S." 
-                     data-desc="Georgette embroidered Anarkali kurti with matching dupatta and pants. Heavy embroidery work, beautiful details, sizes S/M/L/XL available. Brand new packet piece. Perfect for festival and function wear."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1610030469668-93535c17b6b3?w=500&auto=format&fit=crop" alt="Anarkali Suit">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹399</div>
-                        <div class="mp-card-title">Georgette Embroidered Anarkali Kurti Suit Set with Dupatta</div>
-                        <div class="mp-card-location">Ernakulam, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 21: Kashmiri Pashmina Shawl -->
-                <div class="mp-card" data-category="clothing" 
-                     data-title="Premium Kashmiri Pashmina Shawl (Handcrafted Wool)" 
-                     data-price="₹299" 
-                     data-img="https://images.unsplash.com/photo-1606744824163-985d376605aa?w=500&auto=format&fit=crop" 
-                     data-loc="Kochi, Kerala" 
-                     data-seller="Amina Shah" 
-                     data-desc="Handcrafted premium Kashmiri Pashmina shawl. Very soft wool fabric, beautiful traditional floral design. Brand new, unused. Direct imports from Kashmir valley."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1606744824163-985d376605aa?w=500&auto=format&fit=crop" alt="Pashmina Shawl">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹299</div>
-                        <div class="mp-card-title">Premium Kashmiri Pashmina Shawl (Handcrafted Wool)</div>
-                        <div class="mp-card-location">Kochi, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 22: Silver Anklets -->
-                <div class="mp-card" data-category="jewellery" 
-                     data-title="925 Sterling Silver Plated Designer Anklets (Kolusu)" 
-                     data-price="₹299" 
-                     data-img="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop" 
-                     data-loc="Kochi, Kerala" 
-                     data-seller="Aiswarya R." 
-                     data-desc="925 sterling silver plated designer anklets (Kolusu/Payal). High quality cubic zirconia diamonds. Elegant traditional sound, safe for sensitive skin. Great for gifting."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&auto=format&fit=crop" alt="Silver Anklets">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹299</div>
-                        <div class="mp-card-title">925 Sterling Silver Plated Designer Anklets (Kolusu) - Gift Box</div>
-                        <div class="mp-card-location">Kochi, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 23: Rose Gold Luxury Watch -->
-                <div class="mp-card" data-category="jewellery" 
-                     data-title="18k Rose Gold Plated Ladies Luxury Wristwatch" 
-                     data-price="₹599" 
-                     data-img="https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=500&auto=format&fit=crop" 
-                     data-loc="Kadavanthra, Kochi" 
-                     data-seller="Divya Prasad" 
-                     data-desc="Rose gold luxury wristwatch for women. Embellished with sparkling crystals. Water resistant, quartz movement, original battery. Comes in brand gift box. Perfect fashion accessory."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=500&auto=format&fit=crop" alt="Rose Gold Watch">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹599</div>
-                        <div class="mp-card-title">18k Rose Gold Plated Ladies Luxury Wristwatch (Crystals)</div>
-                        <div class="mp-card-location">Kadavanthra, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 24: Furnished Studio Apartment -->
-                <div class="mp-card" data-category="rentals" 
-                     data-title="Fully Furnished 1 BHK Studio Apartment for Rent" 
-                     data-price="₹7,000/month" 
-                     data-img="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500&auto=format&fit=crop" 
-                     data-loc="Kadavanthra, Kochi" 
-                     data-seller="Thomas Mathew" 
-                     data-desc="Fully furnished studio flat. Ideal for working professionals or couples. AC, washing machine, fridge, TV, gas connection, lift, parking. Ready to occupy. 24x7 water and CCTV."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500&auto=format&fit=crop" alt="Studio Apartment">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹7,000/month</div>
-                        <div class="mp-card-title">Fully Furnished 1 BHK Studio Apartment for Rent near Metro</div>
-                        <div class="mp-card-location">Kadavanthra, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 25: 1 Gram Gold Temple Jewellery -->
-                <div class="mp-card" data-category="jewellery" 
-                     data-title="1 Gram Gold Plated Traditional Temple Jewellery Set" 
-                     data-price="₹850" 
-                     data-img="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&auto=format&fit=crop" 
-                     data-loc="Guruvayur, Thrissur" 
-                     data-seller="Reshma Nair" 
-                     data-desc="Beautiful 1 Gram gold plated traditional temple jewellery set with heavy choker and long haram necklace. Comes with jhumkas. Brand new condition. Perfect for temple and wedding events."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&auto=format&fit=crop" alt="Temple Jewellery">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹850</div>
-                        <div class="mp-card-title">1 Gram Gold Plated Traditional Temple Jewellery Set with Haram</div>
-                        <div class="mp-card-location">Guruvayur, Thrissur</div>
-                    </div>
-                </div>
-
-                <!-- Listing 26: Banarasi Silk Saree -->
-                <div class="mp-card" data-category="clothing" 
-                     data-title="Banarasi Silk Saree - Wedding Red (Gold Zari)" 
-                     data-price="₹999" 
-                     data-img="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop" 
-                     data-loc="Kaloor, Kochi" 
-                     data-seller="Anjali Verma" 
-                     data-desc="Rich Banarasi art silk saree in wedding red. Gold zari work all over. Soft silk fabric, easy to drape. Includes unstitched blouse piece. Highly recommended for bridal collections."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop" alt="Red Saree">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹999</div>
-                        <div class="mp-card-title">Banarasi Silk Saree - Wedding Red (Gold Zari Border)</div>
-                        <div class="mp-card-location">Kaloor, Kochi</div>
-                    </div>
-                </div>
-
-                <!-- Listing 27: Premium Pearl Choker Set -->
-                <div class="mp-card" data-category="jewellery" 
-                     data-title="Premium Natural Freshwater Pearl Choker Set" 
-                     data-price="₹450" 
-                     data-img="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&auto=format&fit=crop" 
-                     data-loc="Kochi, Kerala" 
-                     data-seller="Pooja Sharma" 
-                     data-desc="Handcrafted natural freshwater pearl choker necklace set. Includes matching pearl studs. Elegant look for party wear and designer dresses."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&auto=format&fit=crop" alt="Pearl Choker">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹450</div>
-                        <div class="mp-card-title">Premium Natural Freshwater Pearl Choker Set + Studs</div>
-                        <div class="mp-card-location">Kochi, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 28: Designer Lehenga Choli -->
-                <div class="mp-card" data-category="clothing" 
-                     data-title="Designer Georgette Lehenga Choli Set (Embroidery)" 
-                     data-price="₹1,499" 
-                     data-img="https://images.unsplash.com/photo-1610030469668-93535c17b6b3?w=500&auto=format&fit=crop" 
-                     data-loc="Kochi, Kerala" 
-                     data-seller="Sona Susan" 
-                     data-desc="Semi-stitched georgette lehenga choli with heavy traditional embroidery and sequins work. Matching dupatta with border. Can be stitched up to size 44. Worn once for a family wedding."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1610030469668-93535c17b6b3?w=500&auto=format&fit=crop" alt="Lehenga Choli">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹1,499</div>
-                        <div class="mp-card-title">Designer Georgette Lehenga Choli Set (Semi-Stitched)</div>
-                        <div class="mp-card-location">Kochi, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 29: Branded Sunglass Combo -->
-                <div class="mp-card" data-category="jewellery" 
-                     data-title="Trendy Sunglasses Combo for Women (Pack of 2)" 
-                     data-price="₹350" 
-                     data-img="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&auto=format&fit=crop" 
-                     data-loc="Kochi, Kerala" 
-                     data-seller="Divya K." 
-                     data-desc="Pack of 2 stylish sunglasses for women. UV400 protection filter. Elegant cat-eye and round metallic designs. Soft storage cases and cleaning cloth included."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&auto=format&fit=crop" alt="Women Sunglasses">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹350</div>
-                        <div class="mp-card-title">Trendy Sunglasses Combo for Women (Pack of 2 - Prada/UV400)</div>
-                        <div class="mp-card-location">Kochi, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 30: Palazzo Kurti Set -->
-                <div class="mp-card" data-category="clothing" 
-                     data-title="Rayon Floral Printed Palazzo Kurti Set" 
-                     data-price="₹299" 
-                     data-img="https://images.unsplash.com/photo-1606744824163-985d376605aa?w=500&auto=format&fit=crop" 
-                     data-loc="Kozhikode, Kerala" 
-                     data-seller="Kavya Mohan" 
-                     data-desc="Stylish floral printed rayon kurti with matching loose palazzo pants. Extremely comfortable fabric, ideal for daily office, casual meetups, or college wear. Sizes M to XXL available."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1606744824163-985d376605aa?w=500&auto=format&fit=crop" alt="Palazzo Kurti">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹299</div>
-                        <div class="mp-card-title">Rayon Floral Printed Palazzo Kurti Set (Comfort Fit)</div>
-                        <div class="mp-card-location">Kozhikode, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 31: Designer Bridal Bangles -->
-                <div class="mp-card" data-category="jewellery" 
-                     data-title="Traditional Designer Bridal Bangles Kada Set (24 Pcs)" 
-                     data-price="₹299" 
-                     data-img="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&auto=format&fit=crop" 
-                     data-loc="Thrissur, Kerala" 
-                     data-seller="Meenakshi S." 
-                     data-desc="Traditional red and gold plated bridal metal bangles set. Velvet coating with heavy stone-studded Kada borders. Set of 24 bangles total. Sizes 2.6 and 2.8 available."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&auto=format&fit=crop" alt="Bridal Bangles">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹299</div>
-                        <div class="mp-card-title">Traditional Designer Bridal Bangles Kada Set (Set of 24)</div>
-                        <div class="mp-card-location">Thrissur, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 32: Silk Kurti Combo Pack -->
-                <div class="mp-card" data-category="clothing" 
-                     data-title="Silk Blend Straight Kurti Pack - Combo of 3" 
-                     data-price="₹450" 
-                     data-img="https://images.unsplash.com/photo-1610030469668-93535c17b6b3?w=500&auto=format&fit=crop" 
-                     data-loc="Kottayam, Kerala" 
-                     data-seller="Parvathy G." 
-                     data-desc="Pack of 3 straight-cut rayon/silk blend kurtis. Solid vibrant colors with elegant gold printed neck patterns. Brand new, packets unopened. Great daily wear value combo."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1610030469668-93535c17b6b3?w=500&auto=format&fit=crop" alt="Kurti Combo">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹450</div>
-                        <div class="mp-card-title">Silk Blend Straight Kurti Combo Pack (Set of 3, Solid Colors)</div>
-                        <div class="mp-card-location">Kottayam, Kerala</div>
-                    </div>
-                </div>
-
-                <!-- Listing 33: Maruti Alto 800 [NEW] -->
-                <div class="mp-card" data-category="cars" 
-                     data-title="Maruti Alto 800 LXI (2018 Model, KL 07)" 
-                     data-price="₹60,000" 
-                     data-img="https://images.unsplash.com/photo-1617788138017-80ad40651399?w=500&auto=format&fit=crop" 
-                     data-loc="Malappuram, Kerala" 
-                     data-seller="Faisal Khan" 
-                     data-desc="Maruti Alto 800 LXI. 2018 model, silver color. Driven 38,000 km. Chilling AC, power steering, new tires. Super mileage (22 km/l). KL-10 registration. Single hand used."
-                     onclick="openProductModal(this)">
-                    <div class="mp-card-img-container">
-                        <img class="mp-card-img" src="https://images.unsplash.com/photo-1617788138017-80ad40651399?w=500&auto=format&fit=crop" alt="Maruti Alto">
-                    </div>
-                    <div class="mp-card-details">
-                        <div class="mp-card-price">₹60,000</div>
-                        <div class="mp-card-title">Maruti Alto 800 LXI (2018 model, KL-10, Silver)</div>
-                        <div class="mp-card-location">Malappuram, Kerala</div>
-                    </div>
+                <!-- Loading State -->
+                <div id="loadingIndicator" style="grid-column: 1/-1; text-align: center; padding: 40px; color: #65676b; font-weight: bold;">
+                    Loading listings from database...
                 </div>
             </div>
         </main>
@@ -745,14 +123,144 @@
         </div>
     </div>
 
+    <!-- Create Listing Modal Overlay -->
+    <div id="createListingModal" class="modal-overlay" style="display: none;">
+        <div class="creation-modal-content">
+            <span class="close-modal" onclick="closeCreateListingModal()">&times;</span>
+            <div class="creation-modal-body">
+                <h2>Create New Listing</h2>
+                
+                <form id="createListingForm" onsubmit="handleCreateListingSubmit(event)">
+                    <!-- Category Selection -->
+                    <div class="modal-form-group">
+                        <label for="newCategory">Category</label>
+                        <select id="newCategory" required>
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="bikes">Bikes & Scooters</option>
+                            <option value="phones">Mobile Phones / iPhones</option>
+                            <option value="cars">Cars for Sale</option>
+                            <option value="rentals">Rental Properties</option>
+                            <option value="clothing">Women's Clothing & Sarees</option>
+                            <option value="jewellery">Jewellery & Accessories</option>
+                        </select>
+                    </div>
+
+                    <!-- Title -->
+                    <div class="modal-form-group">
+                        <label for="newTitle">Title</label>
+                        <input type="text" id="newTitle" placeholder="What are you selling?" required maxlength="80">
+                    </div>
+
+                    <!-- Price -->
+                    <div class="modal-form-group">
+                        <label for="newPrice">Price (₹)</label>
+                        <input type="text" id="newPrice" placeholder="Enter price (e.g. ₹15,000 or ₹5,000/month)" required>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="modal-form-group">
+                        <label for="newLoc">Location</label>
+                        <input type="text" id="newLoc" placeholder="e.g. Kakkanad, Kochi" required>
+                    </div>
+
+                    <!-- Seller Name -->
+                    <div class="modal-form-group">
+                        <label for="newSeller">Seller Name</label>
+                        <input type="text" id="newSeller" placeholder="Enter your name" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="modal-form-group">
+                        <label for="newDesc">Description</label>
+                        <textarea id="newDesc" placeholder="Describe the item (condition, years used, reason for sale)" required></textarea>
+                    </div>
+
+                    <!-- Image File Upload -->
+                    <div class="modal-form-group">
+                        <label>Product Image</label>
+                        <div class="file-upload-wrapper">
+                            <span class="btn-file-upload" id="fileBtnText">📁 Choose Image File</span>
+                            <input type="file" id="newImgFile" accept="image/*" required onchange="handleImageFileSelect(event)">
+                        </div>
+                        <div class="preview-container" id="imgPreviewContainer">
+                            <img id="imgPreview" src="" alt="Selected Preview">
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="publish-btn" id="publishBtn">Publish Listing</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Script Section -->
     <script>
+        let allProducts = [];
+        let activeCategory = 'all';
+
+        // Direct, silent redirection to the login page
         function redirectToLogin() {
-            // Direct, silent redirection to the login page
             window.location.href = 'login.html';
         }
 
-        // Modal Open / Close Functions
+        // Load Products dynamically from the Express REST API
+        async function fetchProducts() {
+            const grid = document.getElementById('productGrid');
+            try {
+                const response = await fetch('/api/products');
+                if (!response.ok) throw new Error('Failed to fetch listings');
+                
+                allProducts = await response.json();
+                renderProducts();
+            } catch (err) {
+                console.error(err);
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:red; font-weight:bold;">
+                    Failed to connect to database. Make sure your DATABASE_URL environment variable is set!
+                </div>`;
+            }
+        }
+
+        // Render products list based on active category filters
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            const filtered = allProducts.filter(p => activeCategory === 'all' || p.category === activeCategory);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:#65676b; font-weight:bold;">
+                    No listings found in this category.
+                </div>`;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'mp-card';
+                card.setAttribute('data-id', p.id);
+                card.onclick = () => openProductModal(p);
+
+                card.innerHTML = `
+                    <div class="mp-card-img-container">
+                        <img class="mp-card-img" src="${p.img_url}" alt="${escapeHtml(p.title)}">
+                    </div>
+                    <div class="mp-card-details">
+                        <div class="mp-card-price">${escapeHtml(p.price)}</div>
+                        <div class="mp-card-title">${escapeHtml(p.title)}</div>
+                        <div class="mp-card-location">${escapeHtml(p.location)}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        // Detail Modal Open / Close Functions
         const modal = document.getElementById('productModal');
         const modalImg = document.getElementById('modalImg');
         const modalTitle = document.getElementById('modalTitle');
@@ -761,24 +269,14 @@
         const modalDesc = document.getElementById('modalDesc');
         const modalSeller = document.getElementById('modalSeller');
 
-        function openProductModal(card) {
-            // Read data attributes from clicked card
-            const title = card.getAttribute('data-title');
-            const price = card.getAttribute('data-price');
-            const img = card.getAttribute('data-img');
-            const loc = card.getAttribute('data-loc');
-            const desc = card.getAttribute('data-desc');
-            const seller = card.getAttribute('data-seller');
+        function openProductModal(product) {
+            modalImg.src = product.img_url;
+            modalTitle.textContent = product.title;
+            modalPrice.textContent = product.price;
+            modalLoc.textContent = "Listed in " + product.location;
+            modalDesc.textContent = product.description;
+            modalSeller.textContent = product.seller;
 
-            // Populate Modal Content
-            modalImg.src = img;
-            modalTitle.textContent = title;
-            modalPrice.textContent = price;
-            modalLoc.textContent = "Listed in " + loc;
-            modalDesc.textContent = desc;
-            modalSeller.textContent = seller;
-
-            // Show Modal
             modal.style.display = 'flex';
         }
 
@@ -786,68 +284,162 @@
             modal.style.display = 'none';
         }
 
-        // Close modal when clicking outside the content box
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeProductModal();
+        // Listing Creation Modal Open / Close Functions
+        const createModal = document.getElementById('createListingModal');
+        const imgPreviewContainer = document.getElementById('imgPreviewContainer');
+        const imgPreview = document.getElementById('imgPreview');
+        const fileBtnText = document.getElementById('fileBtnText');
+        const publishBtn = document.getElementById('publishBtn');
+        let encodedBase64Image = '';
+
+        function openCreateListingModal() {
+            document.getElementById('createListingForm').reset();
+            imgPreviewContainer.style.display = 'none';
+            imgPreview.src = '';
+            fileBtnText.textContent = "📁 Choose Image File";
+            encodedBase64Image = '';
+            createModal.style.display = 'flex';
+        }
+
+        function closeCreateListingModal() {
+            createModal.style.display = 'none';
+        }
+
+        // Handle Image Selection and Convert to Base64 dataURL
+        function handleImageFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            fileBtnText.textContent = `Selected: ${file.name.substring(0, 15)}...`;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                encodedBase64Image = e.target.result;
+                imgPreview.src = encodedBase64Image;
+                imgPreviewContainer.style.display = 'flex';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Handle Form Submit to publish new product
+        async function handleCreateListingSubmit(event) {
+            event.preventDefault();
+
+            if (!encodedBase64Image) {
+                alert('Please wait for the image to load or choose another image.');
+                return;
             }
+
+            publishBtn.disabled = true;
+            publishBtn.textContent = 'Publishing...';
+
+            const payload = {
+                category: document.getElementById('newCategory').value,
+                title: document.getElementById('newTitle').value,
+                price: document.getElementById('newPrice').value,
+                img_url: encodedBase64Image,
+                location: document.getElementById('newLoc').value,
+                seller: document.getElementById('newSeller').value,
+                description: document.getElementById('newDesc').value
+            };
+
+            try {
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error('Failed to create listing');
+
+                closeCreateListingModal();
+                fetchProducts(); // Refresh listings list dynamically
+            } catch (err) {
+                console.error(err);
+                alert('Error creating listing. Make sure the image size isn\'t too large.');
+            } finally {
+                publishBtn.disabled = false;
+                publishBtn.textContent = 'Publish Listing';
+            }
+        }
+
+        // Close modals when clicking outside the content boxes
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) closeProductModal();
+            if (e.target === createModal) closeCreateListingModal();
         });
 
-        // Real-time Category Filtering
+        // Sidebar Category Filtering
         const categoryButtons = document.querySelectorAll('.category-btn');
-        const cards = document.querySelectorAll('.mp-card');
         const gridTitle = document.getElementById('gridTitle');
 
         categoryButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 
-                // Remove active class from all buttons and add to the clicked one
                 categoryButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
 
-                const selectedCategory = button.getAttribute('data-category');
+                activeCategory = button.getAttribute('data-category');
 
-                // Update the grid title based on category
-                if (selectedCategory === 'all') {
+                if (activeCategory === 'all') {
                     gridTitle.textContent = "Today's picks for you";
                 } else {
                     const categoryName = button.querySelector('span:not(.mp-nav-icon)').textContent;
                     gridTitle.textContent = categoryName + " near you";
                 }
 
-                // Show/hide cards based on category
-                cards.forEach(card => {
-                    const cardCategory = card.getAttribute('data-category');
-                    if (selectedCategory === 'all' || cardCategory === selectedCategory) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+                renderProducts();
             });
         });
 
-        // Search Bar Filtering
+        // Search bar filters
         const searchInput = document.getElementById('searchBar');
         const sidebarSearchInput = document.getElementById('sidebarSearchBar');
 
         function handleSearch(query) {
             const lowerQuery = query.toLowerCase().trim();
-            cards.forEach(card => {
-                const title = card.querySelector('.mp-card-title').textContent.toLowerCase();
-                const location = card.querySelector('.mp-card-location').textContent.toLowerCase();
-                
-                if (title.includes(lowerQuery) || location.includes(lowerQuery)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+            const filtered = allProducts.filter(p => {
+                const title = p.title.toLowerCase();
+                const location = p.location.toLowerCase();
+                const categoryMatch = activeCategory === 'all' || p.category === activeCategory;
+                return categoryMatch && (title.includes(lowerQuery) || location.includes(lowerQuery));
+            });
+
+            // Re-render only matching products
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:#65676b; font-weight:bold;">
+                    No matching listings found.
+                </div>`;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'mp-card';
+                card.onclick = () => openProductModal(p);
+                card.innerHTML = `
+                    <div class="mp-card-img-container">
+                        <img class="mp-card-img" src="${p.img_url}" alt="${escapeHtml(p.title)}">
+                    </div>
+                    <div class="mp-card-details">
+                        <div class="mp-card-price">${escapeHtml(p.price)}</div>
+                        <div class="mp-card-title">${escapeHtml(p.title)}</div>
+                        <div class="mp-card-location">${escapeHtml(p.location)}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
             });
         }
 
         searchInput.addEventListener('input', (e) => handleSearch(e.target.value));
         sidebarSearchInput.addEventListener('input', (e) => handleSearch(e.target.value));
+
+        // Start Initial Fetch
+        fetchProducts();
     </script>
 </body>
 </html>
