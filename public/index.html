@@ -23,7 +23,9 @@
             <div class="mp-tab" title="Watch" id="watchTab" onclick="showWatchView()">
                 <span class="icon">📺</span>
             </div>
-            <div class="mp-tab" title="Groups"><span class="icon">👥</span></div>
+            <div class="mp-tab" title="Groups" id="groupsTab" onclick="showGroupsView()">
+                <span class="icon">👥</span>
+            </div>
             <div class="mp-tab" title="Gaming" id="gamingTab" onclick="showGamingView()">
                 <span class="icon">🎮</span>
             </div>
@@ -78,7 +80,7 @@
             <button class="mp-create-btn" onclick="openCreateListingModal()">+ Create new listing</button>
         </aside>
 
-        <!-- Product Listings / Video / Gaming Feed Container -->
+        <!-- Product Listings / Video / Gaming / Groups Feed Container -->
         <main class="mp-content">
             <!-- Header for Marketplace Mode -->
             <div class="mp-content-header" id="contentHeader">
@@ -104,6 +106,13 @@
             <div id="gamingFeedContainer" class="gaming-feed-container" style="display: none;">
                 <div class="games-grid" id="gamesGrid">
                     <!-- Populated dynamically with game cards -->
+                </div>
+            </div>
+
+            <!-- Groups Feed Container (Hidden by default) -->
+            <div id="groupsFeedContainer" class="groups-feed-container" style="display: none;">
+                <div class="groups-grid" id="groupsGrid">
+                    <!-- Populated dynamically with group cards -->
                 </div>
             </div>
         </main>
@@ -226,10 +235,11 @@
         let allProducts = [];
         let activeCategory = 'all';
 
-        // TABS TOGGLE NAVIGATION (🏠 Home vs 📺 Watch vs 🎮 Gaming)
+        // TABS TOGGLE NAVIGATION (🏠 Home vs 📺 Watch vs 👥 Groups vs 🎮 Gaming)
         function showHomeView() {
             document.getElementById('homeTab').classList.add('active');
             document.getElementById('watchTab').classList.remove('active');
+            document.getElementById('groupsTab').classList.remove('active');
             document.getElementById('gamingTab').classList.remove('active');
 
             document.querySelector('.mp-sidebar').style.display = 'flex';
@@ -237,11 +247,13 @@
             document.getElementById('productGrid').style.display = 'grid';
             document.getElementById('videoFeedContainer').style.display = 'none';
             document.getElementById('gamingFeedContainer').style.display = 'none';
+            document.getElementById('groupsFeedContainer').style.display = 'none';
         }
 
         function showWatchView() {
             document.getElementById('watchTab').classList.add('active');
             document.getElementById('homeTab').classList.remove('active');
+            document.getElementById('groupsTab').classList.remove('active');
             document.getElementById('gamingTab').classList.remove('active');
 
             document.querySelector('.mp-sidebar').style.display = 'none';
@@ -249,20 +261,39 @@
             document.getElementById('productGrid').style.display = 'none';
             document.getElementById('videoFeedContainer').style.display = 'block';
             document.getElementById('gamingFeedContainer').style.display = 'none';
+            document.getElementById('groupsFeedContainer').style.display = 'none';
 
             fetchVideos();
+        }
+
+        function showGroupsView() {
+            document.getElementById('groupsTab').classList.add('active');
+            document.getElementById('homeTab').classList.remove('active');
+            document.getElementById('watchTab').classList.remove('active');
+            document.getElementById('gamingTab').classList.remove('active');
+
+            document.querySelector('.mp-sidebar').style.display = 'none';
+            document.getElementById('contentHeader').style.display = 'none';
+            document.getElementById('productGrid').style.display = 'none';
+            document.getElementById('videoFeedContainer').style.display = 'none';
+            document.getElementById('gamingFeedContainer').style.display = 'none';
+            document.getElementById('groupsFeedContainer').style.display = 'block';
+
+            fetchGroups();
         }
 
         function showGamingView() {
             document.getElementById('gamingTab').classList.add('active');
             document.getElementById('homeTab').classList.remove('active');
             document.getElementById('watchTab').classList.remove('active');
+            document.getElementById('groupsTab').classList.remove('active');
 
             document.querySelector('.mp-sidebar').style.display = 'none';
             document.getElementById('contentHeader').style.display = 'none';
             document.getElementById('productGrid').style.display = 'none';
             document.getElementById('videoFeedContainer').style.display = 'none';
             document.getElementById('gamingFeedContainer').style.display = 'block';
+            document.getElementById('groupsFeedContainer').style.display = 'none';
 
             fetchGames();
         }
@@ -415,6 +446,59 @@
         function closeGamePlayerModal() {
             gamePlayerModal.style.display = 'none';
             gameIframe.src = ''; // Clear iframe to stop background sounds
+        }
+
+        // Fetch Groups from database API
+        async function fetchGroups() {
+            const grid = document.getElementById('groupsGrid');
+            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:#65676b; font-weight:bold;">Loading Groups...</div>';
+            try {
+                const response = await fetch('/api/groups');
+                if (!response.ok) throw new Error('Failed to fetch groups');
+                const groups = await response.json();
+                renderGroups(groups);
+            } catch (err) {
+                console.error(err);
+                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:red; font-weight:bold;">Failed to connect to database.</div>';
+            }
+        }
+
+        // Render Groups
+        function renderGroups(groups) {
+            const grid = document.getElementById('groupsGrid');
+            grid.innerHTML = '';
+
+            if (groups.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:#65676b; font-weight:bold;">No groups in Groups feed yet.</div>';
+                return;
+            }
+
+            groups.forEach(g => {
+                const card = document.createElement('div');
+                card.className = 'group-card';
+                card.innerHTML = `
+                    <div class="group-card-img-container">
+                        <img class="group-card-img" src="${g.thumbnail_url}" alt="${escapeHtml(g.name)}">
+                    </div>
+                    <div class="group-card-details">
+                        <h3>${escapeHtml(g.name)}</h3>
+                        <div class="group-members">${escapeHtml(g.member_count)}</div>
+                        <div class="group-category-badge">${escapeHtml(g.category)}</div>
+                        <p>${escapeHtml(g.description || '')}</p>
+                        <button class="join-group-btn" onclick="joinGroup(this, '${escapeHtml(g.name)}')">Join Group</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Join Group Interactive Button Action
+        function joinGroup(btn, name) {
+            if (btn.classList.contains('joined')) return;
+            alert(`Request sent! You have joined "${name}".`);
+            btn.textContent = 'Joined';
+            btn.classList.add('joined');
+            btn.disabled = true;
         }
 
         // Escape HTML for safety

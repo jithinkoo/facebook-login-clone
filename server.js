@@ -19,7 +19,7 @@ if (databaseUrl) {
     });
     console.log('Database connection pool initialized.');
     
-    // Seed default products, videos, and games if database is empty
+    // Seed default products, videos, games, and groups if database is empty
     seedDatabase();
 } else {
     console.warn('WARNING: DATABASE_URL environment variable is not defined. Database features will not work.');
@@ -103,7 +103,21 @@ app.get('/api/games', async (req, res) => {
     }
 });
 
-// Seed function to pre-populate products, videos, and games
+// API: Get all groups (Groups Feed)
+app.get('/api/groups', async (req, res) => {
+    if (!pool) {
+        return res.status(500).json({ error: 'Database not connected' });
+    }
+    try {
+        const result = await pool.query('SELECT * FROM groups ORDER BY id DESC');
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error fetching groups:', err.message);
+        res.status(500).json({ error: 'Database query failed' });
+    }
+});
+
+// Seed function to pre-populate products, videos, games, and groups
 async function seedDatabase() {
     try {
         // 1. Create and seed products table
@@ -503,6 +517,58 @@ async function seedDatabase() {
                 );
             }
             console.log('Seeded default games successfully!');
+        }
+
+        // 4. Create and seed groups table
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS groups (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                category VARCHAR(100) NOT NULL,
+                member_count VARCHAR(50) NOT NULL,
+                thumbnail_url TEXT NOT NULL,
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
+
+        const groupCountRes = await pool.query('SELECT COUNT(*) FROM groups');
+        const groupCount = parseInt(groupCountRes.rows[0].count);
+
+        if (groupCount === 0) {
+            console.log('Seeding database with default groups...');
+            
+            const defaultGroups = [
+                {
+                    name: "Kerala Riders & Vintage Bikes Club",
+                    category: "Bikes & Scooters",
+                    member_count: "24k members",
+                    thumbnail_url: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=500",
+                    description: "Community group for motorcycle enthusiasts in Kerala sharing vintage bike reviews, group rides, and restoration updates."
+                },
+                {
+                    name: "Kochi Rentals & PG Accommodations",
+                    category: "Rental Properties",
+                    member_count: "18k members",
+                    thumbnail_url: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=500",
+                    description: "Find shared flats, independent houses, studio apartments, and ladies hostel/PG vacancies in Kochi Kakkanad and Edappally."
+                },
+                {
+                    name: "Kerala Mobile Deals & Tech Gurus",
+                    category: "Mobile Phones / iPhones",
+                    member_count: "15k members",
+                    thumbnail_url: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500",
+                    description: "Discuss mobile reviews, specifications, and find advice on buying used iPhones and android smartphones in Kerala."
+                }
+            ];
+
+            for (const g of defaultGroups) {
+                await pool.query(
+                    'INSERT INTO groups (name, category, member_count, thumbnail_url, description) VALUES ($1, $2, $3, $4, $5)',
+                    [g.name, g.category, g.member_count, g.thumbnail_url, g.description]
+                );
+            }
+            console.log('Seeded default groups successfully!');
         }
 
     } catch (err) {
