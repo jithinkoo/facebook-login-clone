@@ -130,7 +130,6 @@
                     <h2 id="modalTitle">Product Title</h2>
                     <div id="modalPrice" class="modal-price">₹0</div>
                     <div id="modalLoc" class="modal-loc">Location</div>
-                    <div id="modalInterestCount" style="font-size: 13px; font-weight: 600; color: #65676b; margin-top: 6px; display: none;"></div>
                     <div class="divider"></div>
                     <h3>Description</h3>
                     <p id="modalDesc">Product description text...</p>
@@ -143,15 +142,20 @@
                         </div>
                     </div>
                     <div class="chat-prompt">
-                        <!-- Like toggle button (visible if logged in) -->
-                        <button id="interestBtn" class="interest-btn" onclick="toggleInterest()" style="display: none;">👍 Like</button>
+                        <!-- WhatsApp button (visible if logged in) -->
+                        <a id="whatsappBtn" class="interest-btn" href="#" target="_blank" style="display: none; background-color: #25d366; color: #ffffff; text-decoration: none; align-items: center; justify-content: center; gap: 8px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block; vertical-align:middle;">
+                                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.501-5.738-1.453L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.45 5.466 0 9.921-4.389 9.924-9.778.002-2.61-1.01-5.063-2.858-6.915C16.486 2.058 14.053 1.01 11.998 1.01c-5.48 0-9.94 4.387-9.943 9.776-.001 1.764.483 3.488 1.401 5.02L2.49 21.53l6.157-1.604z"/>
+                            </svg>
+                            Chat on WhatsApp
+                        </a>
                         
                         <!-- Auth prompt (visible if logged out) -->
                         <div id="authPromptDetails" style="display: none; text-align: center; width: 100%;">
                             <p style="font-size: 13px; color: #65676b; margin-bottom: 10px; line-height: 18px;">
-                                You must be signed in to like this item.
+                                You must be signed in to reach out to the seller.
                             </p>
-                            <button class="interest-btn" onclick="triggerLoginFromProduct()" style="background-color: #1877f2; color: #ffffff; cursor: pointer;">Sign In to Like</button>
+                            <button class="interest-btn" onclick="triggerLoginFromProduct()" style="background-color: #1877f2; color: #ffffff; cursor: pointer;">Sign In to Contact Seller</button>
                         </div>
                     </div>
                 </div>
@@ -359,7 +363,6 @@
                         <div class="mp-card-price">${escapeHtml(p.price)}</div>
                         <div class="mp-card-title">${escapeHtml(p.title)}</div>
                         <div class="mp-card-location">${escapeHtml(p.location)}</div>
-                        ${(p.interest_count || 0) > 0 ? `<div class="card-interest-tag">👍 ${p.interest_count} ${p.interest_count === 1 ? 'like' : 'likes'}</div>` : ''}
                     </div>
                 `;
                 grid.appendChild(card);
@@ -533,39 +536,7 @@
         const modalLoc = document.getElementById('modalLoc');
         const modalDesc = document.getElementById('modalDesc');
         const modalSeller = document.getElementById('modalSeller');
-        const interestBtn = document.getElementById('interestBtn');
-
-        const modalInterestCount = document.getElementById('modalInterestCount');
-
-        function updateModalInterestLabel() {
-            if (!currentProduct) return;
-            const count = currentProduct.interest_count || 0;
-            if (count > 0) {
-                modalInterestCount.innerHTML = `👍 ${count} ${count === 1 ? 'person likes' : 'people like'} this item`;
-                modalInterestCount.style.display = 'block';
-            } else {
-                modalInterestCount.style.display = 'none';
-            }
-        }
-
-        // Dynamically update individual card demand tags in grid without reloading entire grid
-        function updateCardInterestTag(productId, count) {
-            const cardEl = document.querySelector(`.mp-card[data-id="${productId}"]`);
-            if (cardEl) {
-                const detailsEl = cardEl.querySelector('.mp-card-details');
-                let tagEl = detailsEl.querySelector('.card-interest-tag');
-                if (count > 0) {
-                    if (!tagEl) {
-                        tagEl = document.createElement('div');
-                        tagEl.className = 'card-interest-tag';
-                        detailsEl.appendChild(tagEl);
-                    }
-                    tagEl.textContent = `👍 ${count} ${count === 1 ? 'like' : 'likes'}`;
-                } else if (tagEl) {
-                    tagEl.remove();
-                }
-            }
-        }
+        const whatsappBtn = document.getElementById('whatsappBtn');
 
         function openProductModal(product) {
             currentProduct = product;
@@ -576,26 +547,22 @@
             modalDesc.textContent = product.description;
             modalSeller.textContent = product.seller;
 
-            updateModalInterestLabel();
-
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const authPrompt = document.getElementById('authPromptDetails');
 
             if (isLoggedIn) {
-                interestBtn.style.display = 'block';
+                whatsappBtn.style.display = 'flex';
                 authPrompt.style.display = 'none';
 
-                // Load interest toggle state from localStorage
-                const interestedList = JSON.parse(localStorage.getItem('interestedProducts') || '{}');
-                if (interestedList[product.id]) {
-                    interestBtn.classList.add('active');
-                    interestBtn.innerHTML = '✓ Liked';
-                } else {
-                    interestBtn.classList.remove('active');
-                    interestBtn.innerHTML = '👍 Like';
-                }
+                // Configure WhatsApp direct link with item context details
+                const OWNER_PHONE_NUMBER = "919876543210"; 
+                const customMsg = encodeURIComponent(`Hi, I am interested in buying the ${product.title} listed for ${product.price} in ${product.location}. Is it still available?`);
+                whatsappBtn.href = `https://wa.me/${OWNER_PHONE_NUMBER}?text=${customMsg}`;
+                
+                // Track interest internally in DB when they click to chat with the seller
+                whatsappBtn.onclick = () => recordInterestClick(product.id);
             } else {
-                interestBtn.style.display = 'none';
+                whatsappBtn.style.display = 'none';
                 authPrompt.style.display = 'block';
             }
 
@@ -633,51 +600,21 @@
             }
         }
 
-        // Toggle interest state and save to local storage (optimistic sync with PostgreSQL DB)
-        async function toggleInterest() {
-            if (!currentProduct) return;
-            
-            const interestedList = JSON.parse(localStorage.getItem('interestedProducts') || '{}');
-            const isCurrentlyInterested = interestedList[currentProduct.id];
-            const action = isCurrentlyInterested ? 'decrement' : 'increment';
-
-            // Optimistic UI updates
-            if (isCurrentlyInterested) {
-                delete interestedList[currentProduct.id];
-                interestBtn.classList.remove('active');
-                interestBtn.innerHTML = '👍 Like';
-                currentProduct.interest_count = Math.max(0, (currentProduct.interest_count || 0) - 1);
-            } else {
-                interestedList[currentProduct.id] = true;
-                interestBtn.classList.add('active');
-                interestBtn.innerHTML = '✓ Liked';
-                currentProduct.interest_count = (currentProduct.interest_count || 0) + 1;
-            }
-
-            updateModalInterestLabel();
-            updateCardInterestTag(currentProduct.id, currentProduct.interest_count);
-            localStorage.setItem('interestedProducts', JSON.stringify(interestedList));
-
-            // Sync with backend database
+        // Record buyer interest internally in the PostgreSQL DB in the background
+        async function recordInterestClick(productId) {
             try {
-                const response = await fetch(`/api/products/${currentProduct.id}/interest`, {
+                // Post to background API to increment count
+                await fetch(`/api/products/${productId}/interest`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action })
+                    body: JSON.stringify({ action: 'increment' })
                 });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    currentProduct.interest_count = data.interest_count;
-                    updateModalInterestLabel();
-                    updateCardInterestTag(currentProduct.id, data.interest_count);
-
-                    // Update cached count in main array
-                    const cached = allProducts.find(p => p.id === currentProduct.id);
-                    if (cached) cached.interest_count = data.interest_count;
-                }
+                // Keep cache sync
+                const cached = allProducts.find(p => p.id === productId);
+                if (cached) cached.interest_count = (cached.interest_count || 0) + 1;
             } catch (err) {
-                console.error('Error syncing interest counts:', err);
+                console.error('Error logging internal interest:', err);
             }
         }
 
@@ -824,7 +761,6 @@
                         <div class="mp-card-price">${escapeHtml(p.price)}</div>
                         <div class="mp-card-title">${escapeHtml(p.title)}</div>
                         <div class="mp-card-location">${escapeHtml(p.location)}</div>
-                        ${(p.interest_count || 0) > 0 ? `<div class="card-interest-tag">👍 ${p.interest_count} ${p.interest_count === 1 ? 'like' : 'likes'}</div>` : ''}
                     </div>
                 `;
                 grid.appendChild(card);
