@@ -330,6 +330,7 @@
             filtered.forEach(p => {
                 const card = document.createElement('div');
                 card.className = 'mp-card';
+                card.setAttribute('data-id', p.id);
                 card.onclick = () => openProductModal(p);
 
                 card.innerHTML = `
@@ -340,6 +341,7 @@
                         <div class="mp-card-price">${escapeHtml(p.price)}</div>
                         <div class="mp-card-title">${escapeHtml(p.title)}</div>
                         <div class="mp-card-location">${escapeHtml(p.location)}</div>
+                        ${(p.interest_count || 0) > 0 ? `<div class="card-interest-tag">🔥 ${p.interest_count} interested</div>` : ''}
                     </div>
                 `;
                 grid.appendChild(card);
@@ -528,6 +530,25 @@
             }
         }
 
+        // Dynamically update individual card demand tags in grid without reloading entire grid
+        function updateCardInterestTag(productId, count) {
+            const cardEl = document.querySelector(`.mp-card[data-id="${productId}"]`);
+            if (cardEl) {
+                const detailsEl = cardEl.querySelector('.mp-card-details');
+                let tagEl = detailsEl.querySelector('.card-interest-tag');
+                if (count > 0) {
+                    if (!tagEl) {
+                        tagEl = document.createElement('div');
+                        tagEl.className = 'card-interest-tag';
+                        detailsEl.appendChild(tagEl);
+                    }
+                    tagEl.textContent = `🔥 ${count} interested`;
+                } else if (tagEl) {
+                    tagEl.remove();
+                }
+            }
+        }
+
         function openProductModal(product) {
             currentProduct = product;
             modalImg.src = product.img_url;
@@ -579,6 +600,7 @@
             }
 
             updateModalInterestLabel();
+            updateCardInterestTag(currentProduct.id, currentProduct.interest_count);
             localStorage.setItem('interestedProducts', JSON.stringify(interestedList));
 
             // Sync with backend database
@@ -593,6 +615,7 @@
                     const data = await response.json();
                     currentProduct.interest_count = data.interest_count;
                     updateModalInterestLabel();
+                    updateCardInterestTag(currentProduct.id, data.interest_count);
 
                     // Update cached count in main array
                     const cached = allProducts.find(p => p.id === currentProduct.id);

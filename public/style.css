@@ -317,6 +317,18 @@ body {
     margin-top: 4px;
 }
 
+/* Red/Orange Demand Badge on product card grid */
+.card-interest-tag {
+    font-size: 11px;
+    font-weight: bold;
+    color: #e02424;
+    background-color: #fce8e6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-top: 6px;
+    width: fit-content;
+}
+
 /* ========================================================
    PRODUCT DETAIL MODAL POPUP STYLES
    ======================================================== */
