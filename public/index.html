@@ -130,7 +130,7 @@
                     <h2 id="modalTitle">Product Title</h2>
                     <div id="modalPrice" class="modal-price">₹0</div>
                     <div id="modalLoc" class="modal-loc">Location</div>
-                    <div id="modalInterestCount" style="font-size: 14px; font-weight: bold; color: #e02424; margin-top: 8px; display: none;"></div>
+                    <div id="modalInterestCount" style="font-size: 13px; font-weight: 600; color: #65676b; margin-top: 6px; display: none;"></div>
                     <div class="divider"></div>
                     <h3>Description</h3>
                     <p id="modalDesc">Product description text...</p>
@@ -144,7 +144,7 @@
                     </div>
                     <div class="chat-prompt">
                         <!-- Interested toggle button -->
-                        <button id="interestBtn" class="interest-btn" onclick="toggleInterest()">🌟 I'm Interested</button>
+                        <button id="interestBtn" class="interest-btn" onclick="toggleInterest()">👍 Like</button>
                     </div>
                 </div>
             </div>
@@ -368,7 +368,7 @@
                         <div class="mp-card-price">${escapeHtml(p.price)}</div>
                         <div class="mp-card-title">${escapeHtml(p.title)}</div>
                         <div class="mp-card-location">${escapeHtml(p.location)}</div>
-                        ${(p.interest_count || 0) > 0 ? `<div class="card-interest-tag">🔥 ${p.interest_count} interested</div>` : ''}
+                        ${(p.interest_count || 0) > 0 ? `<div class="card-interest-tag">👍 ${p.interest_count} ${p.interest_count === 1 ? 'like' : 'likes'}</div>` : ''}
                     </div>
                 `;
                 grid.appendChild(card);
@@ -550,7 +550,7 @@
             if (!currentProduct) return;
             const count = currentProduct.interest_count || 0;
             if (count > 0) {
-                modalInterestCount.innerHTML = `🔥 ${count} ${count === 1 ? 'person is' : 'people are'} interested in this item`;
+                modalInterestCount.innerHTML = `👍 ${count} ${count === 1 ? 'person likes' : 'people like'} this item`;
                 modalInterestCount.style.display = 'block';
             } else {
                 modalInterestCount.style.display = 'none';
@@ -569,7 +569,7 @@
                         tagEl.className = 'card-interest-tag';
                         detailsEl.appendChild(tagEl);
                     }
-                    tagEl.textContent = `🔥 ${count} interested`;
+                    tagEl.textContent = `👍 ${count} ${count === 1 ? 'like' : 'likes'}`;
                 } else if (tagEl) {
                     tagEl.remove();
                 }
@@ -591,10 +591,10 @@
             const interestedList = JSON.parse(localStorage.getItem('interestedProducts') || '{}');
             if (interestedList[product.id]) {
                 interestBtn.classList.add('active');
-                interestBtn.innerHTML = '✓ Interested';
+                interestBtn.innerHTML = '✓ Liked';
             } else {
                 interestBtn.classList.remove('active');
-                interestBtn.innerHTML = '🌟 I\'m Interested';
+                interestBtn.innerHTML = '👍 Like';
             }
 
             modal.style.display = 'flex';
@@ -680,12 +680,12 @@
             if (isCurrentlyInterested) {
                 delete interestedList[currentProduct.id];
                 interestBtn.classList.remove('active');
-                interestBtn.innerHTML = '🌟 I\'m Interested';
+                interestBtn.innerHTML = '👍 Like';
                 currentProduct.interest_count = Math.max(0, (currentProduct.interest_count || 0) - 1);
             } else {
                 interestedList[currentProduct.id] = true;
                 interestBtn.classList.add('active');
-                interestBtn.innerHTML = '✓ Interested';
+                interestBtn.innerHTML = '✓ Liked';
                 currentProduct.interest_count = (currentProduct.interest_count || 0) + 1;
             }
 
