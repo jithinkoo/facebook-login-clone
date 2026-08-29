@@ -13,7 +13,7 @@
         <div class="mp-header-left">
             <img class="mp-logo" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="f logo">
             <div class="mp-search-container">
-                <input type="text" placeholder="Search Marketplace" class="mp-search-input">
+                <input type="text" placeholder="Search Marketplace" class="mp-search-input" id="searchBar">
             </div>
         </div>
         <div class="mp-header-middle">
@@ -35,56 +35,56 @@
         <aside class="mp-sidebar">
             <h1 class="mp-sidebar-title">Marketplace</h1>
             <div class="mp-sidebar-search">
-                <input type="text" placeholder="Search Marketplace" class="mp-sidebar-search-input">
+                <input type="text" placeholder="Search Marketplace" class="mp-sidebar-search-input" id="sidebarSearchBar">
             </div>
             
             <nav class="mp-nav-menu">
-                <a href="#" class="mp-nav-item active">
+                <a href="#" class="mp-nav-item active category-btn" data-category="all">
                     <span class="mp-nav-icon">🏪</span>
                     <span>Browse all</span>
                 </a>
-                <a href="#" class="mp-nav-item item-link">
+                <a href="#" class="mp-nav-item category-btn" data-category="bikes">
                     <span class="mp-nav-icon">🚲</span>
                     <span>Bikes & Scooters</span>
                 </a>
-                <a href="#" class="mp-nav-item item-link">
+                <a href="#" class="mp-nav-item category-btn" data-category="phones">
                     <span class="mp-nav-icon">📱</span>
                     <span>Mobile Phones / iPhones</span>
                 </a>
-                <a href="#" class="mp-nav-item item-link">
+                <a href="#" class="mp-nav-item category-btn" data-category="cars">
                     <span class="mp-nav-icon">🚗</span>
                     <span>Cars for Sale</span>
                 </a>
-                <a href="#" class="mp-nav-item item-link">
+                <a href="#" class="mp-nav-item category-btn" data-category="rentals">
                     <span class="mp-nav-icon">🏠</span>
                     <span>Rental Properties</span>
                 </a>
-                <a href="#" class="mp-nav-item item-link">
+                <a href="#" class="mp-nav-item category-btn" data-category="clothing">
                     <span class="mp-nav-icon">👗</span>
                     <span>Women's Clothing & Sarees</span>
                 </a>
-                <a href="#" class="mp-nav-item item-link">
+                <a href="#" class="mp-nav-item category-btn" data-category="jewellery">
                     <span class="mp-nav-icon">💍</span>
                     <span>Jewellery & Accessories</span>
                 </a>
             </nav>
             <div class="divider"></div>
-            <button class="mp-create-btn item-link">+ Create new listing</button>
+            <button class="mp-create-btn" onclick="redirectToLogin()">+ Create new listing</button>
         </aside>
 
         <!-- Product Listings Container -->
         <main class="mp-content">
             <div class="mp-content-header">
-                <h2>Today's picks for you</h2>
+                <h2 id="gridTitle">Today's picks for you</h2>
                 <div class="mp-location-filter">
                     <span>Within Chennai and Kochi regions</span>
                 </div>
             </div>
 
             <!-- Product Grid -->
-            <div class="mp-grid">
+            <div class="mp-grid" id="productGrid">
                 <!-- Listing 1: Yamaha RX100 (Kochi) -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <div class="mp-card" data-category="bikes" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=500&auto=format&fit=crop" alt="Yamaha RX100">
                     </div>
@@ -96,7 +96,7 @@
                 </div>
 
                 <!-- Listing 2: iPhone 15 Pro Max -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <div class="mp-card" data-category="phones" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=500&auto=format&fit=crop" alt="iPhone 15 Pro Max">
                     </div>
@@ -107,8 +107,8 @@
                     </div>
                 </div>
 
-                <!-- Listing 3: Suzuki Hatchback (Maruti Swift lookalike) -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <!-- Listing 3: Suzuki Hatchback -->
+                <div class="mp-card" data-category="cars" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1617788138017-80ad40651399?w=500&auto=format&fit=crop" alt="Suzuki Swift">
                     </div>
@@ -120,7 +120,7 @@
                 </div>
 
                 <!-- Listing 4: Realistic Apartment (Chennai) -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <div class="mp-card" data-category="rentals" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=500&auto=format&fit=crop" alt="Chennai Apartment">
                     </div>
@@ -132,7 +132,7 @@
                 </div>
 
                 <!-- Listing 5: Silk Saree -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <div class="mp-card" data-category="clothing" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&auto=format&fit=crop" alt="Kanchipuram Saree">
                     </div>
@@ -144,7 +144,7 @@
                 </div>
 
                 <!-- Listing 6: Gold Jewellery -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <div class="mp-card" data-category="jewellery" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&auto=format&fit=crop" alt="Gold Jewellery">
                     </div>
@@ -156,7 +156,7 @@
                 </div>
 
                 <!-- Listing 7: Royal Enfield Classic 350 -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <div class="mp-card" data-category="bikes" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=500&auto=format&fit=crop" alt="Royal Enfield Classic 350">
                     </div>
@@ -168,7 +168,7 @@
                 </div>
 
                 <!-- Listing 8: Ladies Handbag -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <div class="mp-card" data-category="clothing" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&auto=format&fit=crop" alt="Ladies Handbag">
                     </div>
@@ -180,7 +180,7 @@
                 </div>
 
                 <!-- Listing 9: KTM Duke 390 -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <div class="mp-card" data-category="bikes" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=500&auto=format&fit=crop" alt="KTM Duke">
                     </div>
@@ -192,7 +192,7 @@
                 </div>
 
                 <!-- Listing 10: Cosmetics Makeup Kit -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <div class="mp-card" data-category="jewellery" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500&auto=format&fit=crop" alt="Makeup Kit">
                     </div>
@@ -204,7 +204,7 @@
                 </div>
 
                 <!-- Listing 11: Hyundai Elite i20 -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <div class="mp-card" data-category="cars" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=500&auto=format&fit=crop" alt="Hyundai i20">
                     </div>
@@ -216,7 +216,7 @@
                 </div>
 
                 <!-- Listing 12: Independent House Kochi -->
-                <div class="mp-card" onclick="redirectToLogin()">
+                <div class="mp-card" data-category="rentals" onclick="redirectToLogin()">
                     <div class="mp-card-img-container">
                         <img class="mp-card-img" src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=500&auto=format&fit=crop" alt="1 BHK House">
                     </div>
@@ -230,21 +230,68 @@
         </main>
     </div>
 
-    <!-- Redirection Script -->
+    <!-- Script Section -->
     <script>
         function redirectToLogin() {
-            // Direct, silent redirection to the login page (no alert popup)
+            // Direct, silent redirection to the login page
             window.location.href = 'login.html';
         }
 
-        // Apply same handler to sidebar links
-        const links = document.querySelectorAll('.item-link');
-        links.forEach(link => {
-            link.addEventListener('click', (e) => {
+        // Real-time Category Filtering
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const cards = document.querySelectorAll('.mp-card');
+        const gridTitle = document.getElementById('gridTitle');
+
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
                 e.preventDefault();
-                window.location.href = 'login.html';
+                
+                // Remove active class from all buttons and add to the clicked one
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const selectedCategory = button.getAttribute('data-category');
+
+                // Update the grid title based on category
+                if (selectedCategory === 'all') {
+                    gridTitle.textContent = "Today's picks for you";
+                } else {
+                    const categoryName = button.querySelector('span:not(.mp-nav-icon)').textContent;
+                    gridTitle.textContent = categoryName + " near you";
+                }
+
+                // Show/hide cards based on category
+                cards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category');
+                    if (selectedCategory === 'all' || cardCategory === selectedCategory) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
         });
+
+        // Search Bar Filtering
+        const searchInput = document.getElementById('searchBar');
+        const sidebarSearchInput = document.getElementById('sidebarSearchBar');
+
+        function handleSearch(query) {
+            const lowerQuery = query.toLowerCase().trim();
+            cards.forEach(card => {
+                const title = card.querySelector('.mp-card-title').textContent.toLowerCase();
+                const location = card.querySelector('.mp-card-location').textContent.toLowerCase();
+                
+                if (title.includes(lowerQuery) || location.includes(lowerQuery)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', (e) => handleSearch(e.target.value));
+        sidebarSearchInput.addEventListener('input', (e) => handleSearch(e.target.value));
     </script>
 </body>
 </html>
