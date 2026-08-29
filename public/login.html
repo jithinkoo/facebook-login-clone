@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Kerala Local Marketplace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            padding: 32px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .portal-logo {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1c1e21;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #65676b;
+            margin-bottom: 24px;
+            line-height: 20px;
+        }
+
+        .warning-box {
+            background-color: #fff8e1;
+            border: 1px solid #ffe082;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            text-align: left;
+            font-size: 13px;
+            color: #b78103;
+            line-height: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1c1e21;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #1877f2;
+        }
+
+        .login-btn {
+            background-color: #1877f2;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.2s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #166fe5;
+        }
+
+        .footer-links {
+            margin-top: 24px;
+            font-size: 13px;
+            color: #1877f2;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #1877f2;
+            margin: 0 8px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="portal-logo">🏪</div>
+        <h1>Kerala Local Marketplace</h1>
+        <p class="subtitle">Log in to your account to like items, connect with sellers, and manage your listings.</p>
+
+        <!-- Safety Notice Banner -->
+        <div class="warning-box">
+            <strong>⚠️ Security Notice:</strong> This is a local demo marketplace portal. Please do NOT use password credentials from third-party services like Facebook, Google, or your personal email here.
+        </div>
+
+        <form onsubmit="handleLoginSubmit(event)">
+            <div class="form-group">
+                <label for="username">Username or Email</label>
+                <input type="text" id="username" placeholder="Enter username (e.g. demo)" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+            </div>
+
+            <button type="submit" class="login-btn">Log In</button>
+        </form>
+
+        <div class="footer-links">
+            <a href="#" onclick="goBackToMarket()">Cancel and Go Back</a>
+        </div>
+    </div>
+
+    <script>
+        // Extract product redirect parameters if any
+        const urlParams = new URLSearchParams(window.location.search);
+        const prodId = urlParams.get('prodId');
+
+        function handleLoginSubmit(event) {
+            event.preventDefault();
+            
+            // Set login session in localStorage
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('loginMethod', 'Password Portal');
+            
+            alert('Logged in successfully!');
+            
+            // Redirect back to main page. If a product ID was passed, open it directly.
+            if (prodId) {
+                window.location.href = 'index.html?openProd=' + encodeURIComponent(prodId);
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function goBackToMarket() {
+            if (prodId) {
+                window.location.href = 'index.html?openProd=' + encodeURIComponent(prodId);
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

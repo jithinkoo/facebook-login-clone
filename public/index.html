@@ -159,33 +159,6 @@
         </div>
     </div>
 
-    <!-- Sign In Modal Overlay -->
-    <div id="signInModal" class="modal-overlay" style="display: none;">
-        <div class="creation-modal-content" style="max-width: 400px; text-align: center;">
-            <span class="close-modal" onclick="closeSignInModal()">&times;</span>
-            <div class="creation-modal-body" style="padding: 30px 20px;">
-                <div style="font-size: 40px; margin-bottom: 12px;">🏪</div>
-                <h2 style="margin-bottom: 8px;">Sign in to Marketplace</h2>
-                <p style="color: #65676b; font-size: 14px; margin-bottom: 24px; line-height: 20px;">
-                    Please sign in to view full product details, seller contact info, and express interest in listings.
-                </p>
-                
-                <button onclick="handleMockLogin('Google')" class="publish-btn" style="background-color: #ffffff; color: #1c1e21; border: 1px solid #dddfe2; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" style="height: 18px;" alt="Google Logo">
-                    Continue with Google
-                </button>
-                
-                <button onclick="handleMockLogin('Email')" class="publish-btn" style="background-color: #1877f2; color: #ffffff; margin-bottom: 12px; cursor: pointer;">
-                    📧 Continue with Email
-                </button>
-                
-                <div style="font-size: 12px; color: #65676b; margin-top: 16px;">
-                    By signing in, you agree to our Terms and Community Guidelines.
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Create Listing Modal Overlay -->
     <div id="createListingModal" class="modal-overlay" style="display: none;">
         <div class="creation-modal-content">
@@ -340,6 +313,16 @@
                 
                 allProducts = await response.json();
                 renderProducts();
+
+                // Auto-open product details if query param exists (redirected from login page)
+                const urlParams = new URLSearchParams(window.location.search);
+                const openProdId = urlParams.get('openProd');
+                if (openProdId) {
+                    const product = allProducts.find(p => p.id == openProdId);
+                    if (product) {
+                        openProductModal(product);
+                    }
+                }
             } catch (err) {
                 console.error(err);
                 grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:red; font-weight:bold;">
@@ -620,8 +603,11 @@
         }
 
         function triggerLoginFromProduct() {
-            openSignInModal();
-            pendingProductToOpen = currentProduct;
+            if (currentProduct) {
+                window.location.href = 'login.html?prodId=' + encodeURIComponent(currentProduct.id);
+            } else {
+                window.location.href = 'login.html';
+            }
         }
 
         function closeProductModal() {
@@ -630,40 +616,6 @@
         }
 
         // Authentication & Sign-in Redirection Handlers
-        let pendingProductToOpen = null;
-        const signInModal = document.getElementById('signInModal');
-
-        function checkLoginAndOpen(product) {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            if (isLoggedIn) {
-                openProductModal(product);
-            } else {
-                pendingProductToOpen = product;
-                openSignInModal();
-            }
-        }
-
-        function openSignInModal() {
-            signInModal.style.display = 'flex';
-        }
-
-        function closeSignInModal() {
-            signInModal.style.display = 'none';
-            pendingProductToOpen = null;
-        }
-
-        function handleMockLogin(method) {
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('loginMethod', method);
-            closeSignInModal();
-            updateHeaderProfile();
-            
-            if (pendingProductToOpen) {
-                openProductModal(pendingProductToOpen);
-                pendingProductToOpen = null;
-            }
-        }
-
         function handleProfileClick() {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             if (isLoggedIn) {
@@ -672,9 +624,10 @@
                     localStorage.removeItem('loginMethod');
                     updateHeaderProfile();
                     closeProductModal();
+                    window.location.reload();
                 }
             } else {
-                openSignInModal();
+                window.location.href = 'login.html';
             }
         }
 
@@ -824,7 +777,6 @@
             if (e.target === modal) closeProductModal();
             if (e.target === createModal) closeCreateListingModal();
             if (e.target === gamePlayerModal) closeGamePlayerModal();
-            if (e.target === signInModal) closeSignInModal();
         });
 
         // Category Filtering
